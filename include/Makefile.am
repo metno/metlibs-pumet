@@ -1,6 +1,6 @@
 pkg_includedir= ${prefix}/include/${PACKAGE_NAME}
 
-pkg_include= addWeather.h \
+pkg_include_HEADERS= addWeather.h \
 	cloudGrp.h        \
 	ff2beaufort.h     \
 	gust.h            \
