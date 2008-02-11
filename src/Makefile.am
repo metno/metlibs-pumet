@@ -1,4 +1,4 @@
-pkglib_LTLIBRARIES=libpuMet.la
+lib_LTLIBRARIES=libpuMet.la
 
 libpuMet_la_SOURCES= gust.cc \
 	windProfile.cc \

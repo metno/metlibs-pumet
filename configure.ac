@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([puMet], [4.0.0], [diana@met.no])
+AC_INIT([puMet], [3.0.0], [diana@met.no])
 AM_INIT_AUTOMAKE
 METNO_SET_VERSION_INFO
 
@@ -29,7 +29,7 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$prefix/lib/pkgconfig
 
 # check for puTools
 PKG_CHECK_MODULES([puTools], [putools])
-METNO_CHECK_LIB([putools], [main], , , , [$puTools_LIBS], 
+METNO_CHECK_LIB([puTools], [main], , , , [$puTools_LIBS], 
                 [the puTools package])
 
 # Checks for header files.
