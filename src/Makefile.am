@@ -17,6 +17,6 @@ libpuMet_la_SOURCES= gust.cc \
 	visibility.cc 
 
 libpuMet_la_CXXFLAGS= ${puTools_CFLAGS} 
-libpuMet_la_LDFLAGS= ${puTools_LIBS}
+libpuMet_la_LDFLAGS= ${puTools_LIBS} ${VERSION_INFO}
 INSTALL=install -p #tells install to preserve timestamp
 DEFAULT_INCLUDES=-I${srcdir}/../include
