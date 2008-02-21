@@ -15,3 +15,5 @@ pkg_include_HEADERS= addWeather.h \
 	vision.h          \
 	weatherSpec.h     \
 	windProfile.h
+
+INSTALL=install -p # tells install to preserve timestamp
