@@ -14,7 +14,8 @@ libpuMet_la_SOURCES= gust.cc \
 	humidity.cc \
 	ff2beaufort.cc \
 	iceAccretion.cc \
-	visibility.cc 
+	visibility.cc \
+	WindCalc.cc
 
 libpuMet_la_CXXFLAGS= ${puTools_CFLAGS} 
 libpuMet_la_LDFLAGS= ${puTools_LIBS} ${VERSION_INFO}
