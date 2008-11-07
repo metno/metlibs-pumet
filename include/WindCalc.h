@@ -46,6 +46,8 @@ public:
   bool readFactors(const miString& filename);
   float meanWind(float wind10m, int stability, int height);
   float gust(float wind10m, int stability, int height);
+  static int beaufort(float wind10m, miString & text);
+
 };
 
 #endif
