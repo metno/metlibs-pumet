@@ -112,7 +112,12 @@ void miSymbol::setLightStat(miTime termin, float glat){
 
 };
 
-
+bool 
+miSymbol::
+getLightStat()const
+{
+	return lightstat;
+}
 
 
 

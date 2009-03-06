@@ -147,6 +147,19 @@ public:
   static void readSymbols(miString);
   void periods(vector<miTime>,int,int,bool compute_minmax = false);
 
+  /**
+   * This function creates a symbol that is not adjusted with repect on
+   * temperature (state of aggregate). The symbol can be adjusted with a 
+   * call to stateMaker( miSymbol &symbol_, float temperature,
+	*	                   float stateOfAggregate,
+	*                     float lightningIndex,
+	*                     float fogIndex )
+	*/
+  vector<miSymbol> computeWithoutStateOfAggregate( const vector<paramet> &AllModelData,
+  		                                             const vector<miTime> &termin,
+  				      				                     int min = 3,int max = 6);
+
+  
   vector<miSymbol> compute(vector<paramet>, vector<miTime>,int,int);
   vector<miSymbol> compute_new(vector<paramet>, vector<miTime>,
 			       int,int,bool compute_minmax = false);
@@ -158,8 +171,89 @@ public:
   bool cloudMaker(miTime);
   bool rainMaker(miTime);
   bool tempMaker(miTime);
-  bool stateMaker(miTime);
+  
+
+  /**
+   * Create an state of aggregate from temperaure.
+   * The teperature is in degree Celsius.
+   * 
+   *  0 (snow) temperature <= 0.5.
+   *  1 (sleet) 0.5 < temperature < 1.5.
+   *  2 (rain)  temeperature >= 1.5
+   */
+  static int stateOfAggregateFromTemperature( float temperature );
+
+
+  
+  /**
+   * Change the state of aggregate of the symbol based on the temperature.
+   * 
+   * The change is as follow, only symbols with precipitation is in the table.
+   * Other symbols is not affected.
+   *
+   * The state is either form the model or we can compute it from
+   * the temperature. Se the function stateOfAggregateFromTemperature( float temperature ).
+   *
+   * +--------------+-----------------------------------+
+   * |              |            state                  |
+   * +--------------+---------+----------+--------------+           
+   * | SYMBOL       |    0    |    1     |     2        |  
+   * +--------------+---------+----------+--------------+
+   * | LIGHTRAINSUN | SNOWSUN | SLEETSUN |     -        |
+   * | LIGHTRAIN    | SNOW    | SLEET    |     -        |
+   * | RAIN         | SNOW    | SLEET    |     -        |
+   * | SNOW         |   -     | SLEET    | RAIN         |
+   * | SNOWSUN      |   -     | SLEETSUN | LIGHTRAINSUN |
+   * | SLEET        | SNOW    |    -     | RAIN         |
+   * | SLEETSUN     | SNOWSUN |    -     | LIGHTRAINSUN |
+   * +--------------+---------+----------+--------------+
+   * 
+   * If there is lightning the symbol generated fom the table above
+   * vil be adjusted as follow.
+   * 
+   * 
+   * LIGTHRAINSUN -->  LIGHTRAINTHUNDERSUN
+   * LIGTHRAIN    -->  LIGHTRAINTHUNDERSUN
+   * SLEETSUN     -->  LIGHTRAINTHUNDERSUN
+   * RAIN         -->  RAINNTHUNDER
+   * SNOW         -->  SNOWTHUNDER
+   * SNOWSUN      -->  SNOWTHUNDER
+   * SLEET        -->  SNOWTHUNDER
+   * 
+   * If there is fog, it will override all other symbols and the symbol is set to FOG.
+   */
+  static bool stateMaker( miSymbol &symbol_,
+	                       float temperature,
+		                    float stateOfAggregate = FLT_MAX,
+	                       float lightningIndex = FLT_MAX,
+	                       float fogIndex = FLT_MAX );
+ 
+ 
+  
+  bool stateMaker( miTime );
+ 
+  /**
+   * If there is lightning add lightning to the symbolg. The lightningIndex
+   * is a true/false value. Where 0 is false and lightningIndex != 0 is true.
+   * 
+   * If fogIndex is FLT_MAX or FLT_MIN the function does nothing. It is 
+   * treated undefined values.
+   */
+  
+  static void lightningMaker( miSymbol &symbol_, 
+		                        float lightningIndex );
+
   bool lightningMaker(miTime);
+  
+  /**
+   * If there is fog set the symbol to fog. The fogIndex
+   * is a true/false value. Where 0 is false and fogIndex != 0 is true.
+   * 
+   * If fogIndex is FLT_MAX or FLT_MIN the function does nothing. It is 
+   * treated undefined values.
+   */
+  static void fogMaker( miSymbol &symbol_, float fogIndex);
+
   bool fogMaker(miTime);
 
   bool signChange(int, int);

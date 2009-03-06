@@ -541,11 +541,38 @@ bool symbolMaker::tempMaker(miTime now){
   return(true);
 };
 
-
 // main program
 
+
+vector<miSymbol> 
+symbolMaker::
+computeWithoutStateOfAggregate( const vector<paramet> &AllModelData,
+		                          const vector<miTime> &termin,
+				      				  int min,int max)
+{
+  vector<miSymbol> tmpSymbols;
+  myerror=errorSymbol;
+  initializeModel(AllModelData);
+  periods(termin,min,max);
+
+  for( int yet = 0 ; yet < termin.size(); yet++){
+    cloudMaker( termin[yet] );
+    if(symbol != myerror)
+      rainMaker(  termin[yet] );
+ 
+    symbol.setTime(termin[yet]);
+    symbol.setLightStat(termin[yet],latitude);
+    tmpSymbols.push_back(symbol);   
+  }
+
+  return(tmpSymbols);
+
+};
+
+
+
 vector<miSymbol> symbolMaker::compute(vector<paramet> AllModelData,vector<miTime> termin,
-				      int min = 3,int max = 6){
+				      int min,int max){
   vector<miSymbol> tmpSymbols;
    myerror=errorSymbol;
   initializeModel(AllModelData);
@@ -807,110 +834,181 @@ vector<miSymbol> symbolMaker::compute_new(vector<paramet> AllModelData,vector<mi
 };
 
 
-bool symbolMaker::stateMaker(miTime now){
+
+
+bool 
+symbolMaker::
+stateMaker(miTime now)
+{
+	return stateMaker( symbol, FLT_MAX, agr.value( now ), FLT_MAX, FLT_MAX );
+};
+
+int
+symbolMaker::
+stateOfAggregateFromTemperature( float temperature )
+{
+	if( temperature == FLT_MAX || temperature <= DUMMY )
+		return INT_MAX;
+	
+	if(temperature <= 0.5 )
+	   return 0; //Snow
+	
+	if(temperature > 0.5 && temperature < 1.5 )
+		return 1; //Sleet
+	
+	return 2; //rain
+}
+
+
+bool 
+symbolMaker::
+stateMaker( miSymbol &symbol_,
+		      float temperature, 
+			   float stateOfAggregate,
+		      float lightningIndex,
+		      float fogIndex )
+{
 
   int state;
+  miSymbol oldSymbol = symbol_; //Save time and lightstate 
   
-  myerror.AddErr("DATA ERROR > NO STATE DATA");
+  miSymbol myErrorSymbol( errorSymbol );
+  myErrorSymbol.AddErr("DATA ERROR > NO STATE OR TEMPERATURE DATA");
 
-  state = int(agr.value(now));
+  if( stateOfAggregate == FLT_MAX || stateOfAggregate <= DUMMY) 
+	  state = stateOfAggregateFromTemperature( temperature );
+  else
+	  state = int( stateOfAggregate );
+  
+  
   // state: 0=snow, 1=sleet, 2=rain
 
 
   if (state < 0 || state > 2){
-    if (symbol == lightRainSun ||
-	symbol == lightRain    ||
-	symbol == rain        ){
-      symbol = myerror;
+    if (symbol_ == lightRainSun ||
+   	  symbol_ == lightRain    ||
+	     symbol_ == rain )
+    {
+      symbol_ = myErrorSymbol;
       return false;
     }
   }
 
-  if ( symbol == lightRainSun ){
+  if ( symbol_ == lightRainSun ){
     if(state == 0 )
-      symbol = snowSun;
+      symbol_ = snowSun;
     if(state == 1 )
-      symbol = sleetSun;
+      symbol_ = sleetSun;
   }
 
-  if( symbol == lightRain || symbol == rain){
+  if( symbol_ == lightRain || symbol_ == rain){
     if(state == 0 )
-      symbol = snow;
+      symbol_ = snow;
     if(state == 1 )
-      symbol = sleet;
+      symbol_ = sleet;
   }       
 
-  if( symbol == snow ){
+  if( symbol_ == snow ){
     if(state == 1 )
-      symbol = sleet;
+      symbol_ = sleet;
     if(state == 2 )
-      symbol = rain;
+      symbol_ = rain;
   }       
   
-  if( symbol == snowSun){
+  if( symbol_ == snowSun){
     if(state == 1 )
-      symbol = sleetSun;
+      symbol_ = sleetSun;
     if(state == 2 )
-      symbol = lightRainSun;
+      symbol_ = lightRainSun;
   }       
 
 
-  if( symbol == sleet) {
+  if( symbol_ == sleet) {
     if(state == 0 )
-      symbol = snow;
+      symbol_ = snow;
     if(state == 2 )
-      symbol = rain;
+      symbol_ = rain;
   }
 
-  if( symbol == sleetSun) {
+  if( symbol_ == sleetSun) {
     if(state == 0 )
-      symbol = snowSun;
+      symbol_ = snowSun;
     if(state == 2 )
-      symbol = lightRainSun;
+      symbol_ = lightRainSun;
   }
+  
+  lightningMaker( symbol_, lightningIndex );
+  fogMaker( symbol_, fogIndex );
 
-
+  //Restore time and lightstate 
+  symbol_.setTime( oldSymbol.getTime() );
+  symbol_.setLightStat( oldSymbol.getLightStat() );
+ 
   return true;
 };
 
 
-bool symbolMaker::lightningMaker(miTime now){
 
-  int lightning = int(lli.value(now));
-  
+
+bool 
+symbolMaker::lightningMaker(miTime now){
+
+	lightningMaker( symbol, lli.value( now ) );
+	return true;
+};
+
+
+void
+symbolMaker::
+lightningMaker( miSymbol &symbol_, float lightningIndex )
+{
+	if( lightningIndex == FLT_MAX || lightningIndex <= DUMMY )
+		return;
+		
+	int lightning = int( lightningIndex );
    
-  if(lightning != 1 )
-    return true;
+	if( lightning != 1 )
+		return;
 	 
-  if (symbol == lightRainSun || 
-      symbol == lightRain    ||
-      symbol == sleetSun       )
-    symbol = lightRainThunderSun;
+	if( symbol_ == lightRainSun || 
+		 symbol_ == lightRain    ||
+       symbol_ == sleetSun       )
+		symbol_ = lightRainThunderSun;
   
-  if(symbol == rain)
-    symbol = RainThunder;
+	if( symbol_ == rain )
+	  symbol_ = RainThunder;
 
-
-  if(symbol == snow    || 
-     symbol == snowSun ||
-     symbol == sleet     )
-    symbol = SnowThunder;
-  
-  return true;
+	if(symbol_ == snow    || 
+		symbol_ == snowSun ||
+      symbol_ == sleet     )
+		symbol_ = SnowThunder;
 };
 
 
-
-bool symbolMaker::fogMaker(miTime now){
-
-  int foi = int(fogi.value(now));
+void
+symbolMaker::
+fogMaker( miSymbol &symbol_, float fogIndex)
+{
+	if( fogIndex == FLT_MAX || fogIndex <= DUMMY )
+		return;
+	
+  int foi = int( fogIndex );
    
   if (foi == 0 )
-    return true;
+    return;
   
-  symbol = fog;
-  
-  return true;
+  symbol_ = fog;
+};
+
+
+
+bool 
+symbolMaker::
+fogMaker( miTime now )
+{
+	fogMaker( symbol, fogi.value(now) );
+	
+	return true;
 };
 
 

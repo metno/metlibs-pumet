@@ -41,6 +41,7 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <float.h>
 
 
 
@@ -103,6 +104,7 @@ public:
   void AddErr(miString errMessage );
   void setLightStat(miTime,float);
   void setLightStat(bool);
+  bool getLightStat()const;
   void setTime(miTime t){tim = t;};
   
   int vis();
