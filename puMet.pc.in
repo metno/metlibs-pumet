@@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: @PACKAGE_NAME@
+Name: puMet
 Description: The puMet Library
 Version: @VERSION@
-Requires: putools >= 3.1.0
-Libs: -L${libdir} -l@PACKAGE_NAME@
+Requires: puTools >= 3.1.0
+Libs: -L${libdir} -lpuMet
 Cflags: -I${includedir}
