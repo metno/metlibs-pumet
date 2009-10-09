@@ -74,6 +74,8 @@ bool WindCalc::readFactors(const miString& filename){
       continue;
     }
   }
+
+  return true;
 }
 
 float WindCalc::meanWind(float wind10m, int stability, int height){
