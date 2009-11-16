@@ -13,7 +13,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -23,7 +23,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -35,18 +35,18 @@
 class WindCalc {
 private:
   //  height   stability
-  std::map<int, map<int, float> > gust_factors;
+  std::map<int, std::map<int, float> > gust_factors;
   //  height   stability
-  std::map<int, map<int, float> > wind_factors;
-  
+  std::map<int, std::map<int, float> > wind_factors;
+
 
 public:
   WindCalc() {}
 
-  bool readFactors(const miString& filename);
+  bool readFactors(const miutil::miString& filename);
   float meanWind(float wind10m, int stability, int height);
   float gust(float wind10m, int stability, int height);
-  static int beaufort(float wind10m, miString & text);
+  static int beaufort(float wind10m, miutil::miString & text);
 
 };
 

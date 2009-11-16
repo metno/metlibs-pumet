@@ -1,6 +1,6 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -34,6 +34,9 @@
 
 #include <fstream>
 #include "gust.h"
+
+using namespace std;
+using namespace miutil;
 
 
 // functions to access a gust factor
@@ -49,7 +52,7 @@ bool tafGF::getGustFact(miString Name, float DD,float FF, float& gf){
   gf =1;
   return(false);
 };
-  
+
 
 //       like getGustFact, but computes gust
 
@@ -83,52 +86,52 @@ bool station::getSTgust( float DD,float FF, float& gf){
 
 // function to read in all gust factors from file
 
-bool tafGF::readIn(miString fname){      
+bool tafGF::readIn(miString fname){
   gustfactor *gtemp;           //  stores all
   sector *stemp;               //  stores a DD-sector
   sector *ftemp;               //  stores a FF-sector
   float sectMin, sectMax;      //  DD-sector Borders
-  float FFmin  , FFmax;        //  FF-sector Borders 
+  float FFmin  , FFmax;        //  FF-sector Borders
   float gustInp;               //  The gust factor from file
   miString statMi= "";         //  Name of the Station ENAN...
   ifstream gfFile;             //  the input file
   int NOofGF;                  //  Number of Gust factors / DD-sector
-  
+
 
 
   gfFile.open(fname.cStr(),ios::in);
   if(!gfFile)
     return(false);
 
-  
+
   while(!gfFile.eof()){
 
     // reads strings until {
 
     gfFile>>statMi;
     statMi.trim();
-     
+
     if(statMi =="{"){
-      station temp;  
+      station temp;
 
       // searches for the name of the station
 
       while(temp.name == "")
 	gfFile >> temp.name;
 
-    
+
       // reads the Number of GF per sector
 
-      gfFile>>NOofGF;  
+      gfFile>>NOofGF;
 
       // reads the Gf borders
-      
+
       for (int FFgrp=0; FFgrp< NOofGF; FFgrp++){
 	gfFile>>FFmin>>FFmax;
 	ftemp = new sector(FFmin,FFmax);
 	temp.FFsec.push_back(*ftemp);
       }
-      
+
       // reads the gustfactors and sector borders
       // jumps to the next station if illegal format occurs
       // (worst case) and ignores the following sectors
@@ -141,15 +144,15 @@ bool tafGF::readIn(miString fname){
       while(sectMax < 360&& !gfFile.bad()){
 	gfFile>>sectMin>>sectMax;
 	vector<float>  gusttemp;
-       
+
 	for ( int FFrange=0; FFrange<NOofGF; FFrange++){
 	  gfFile>>gustInp;
 	  gusttemp.push_back(gustInp);
 	}
-	
+
 	stemp = new sector(sectMin,sectMax);
 	gtemp = new gustfactor(*stemp,gusttemp);
-	temp.gust.push_back(*gtemp);	  	  
+	temp.gust.push_back(*gtemp);
       }
       gfFile.clear();
       sectMax = 0;
@@ -161,4 +164,4 @@ bool tafGF::readIn(miString fname){
 }
 
 
-  
+

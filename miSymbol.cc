@@ -1,6 +1,6 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -32,8 +32,12 @@
 #include <fstream>
 #include "miSymbol.h"
 
+using namespace std;
+using namespace miutil;
+
+
 // checks out the lightstatus ( false = darkness) and returns the
-// customer requested number 
+// customer requested number
 
 int miSymbol::customNumber(bool lstat){
   if (lstat == false)
@@ -77,7 +81,7 @@ int miSymbol::vis(){
 };
 
 
-// changes the occured error string to the  error symbol 
+// changes the occured error string to the  error symbol
 void miSymbol::AddErr(miString errMessage){
   light.AddValues(999, errMessage,9);
   dark.AddValues(999, errMessage,9);
@@ -98,12 +102,12 @@ void miSymbol::setLightStat(miTime termin, float glat){
   double lat = glat;
   double pcirc = 66.55;
   double doy = double(termin.dayOfYear())+1.0;
-  
+
   double senit = 90.0 - lat - (90.0-pcirc)*cos((doy+10.0)/365.0*2*M_PI);
 
   // atmospheric correction/refraction
 
-  senit = senit +1; 
+  senit = senit +1;
 
   if( lat <= (pcirc+1))
     lightstat =  true;
@@ -112,7 +116,7 @@ void miSymbol::setLightStat(miTime termin, float glat){
 
 };
 
-bool 
+bool
 miSymbol::
 getLightStat()const
 {

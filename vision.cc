@@ -35,6 +35,8 @@
 
 #include "vision.h"
 
+using namespace std;
+using namespace miutil;
 
 
 vision::vision(){

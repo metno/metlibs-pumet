@@ -1,6 +1,6 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -30,8 +30,8 @@
 
 // reads gust factors from file and give functions to access them.
 // all the functions to access the factors are in Class tafGF at
-// the end of this File 
-// juergen schulze, june 1998  
+// the end of this File
+// juergen schulze, june 1998
 
 
 #ifndef _gust_h
@@ -68,9 +68,9 @@ private:
   vector<float> gf;      // gustfactor for different wind speeds
 public:
   gustfactor(){}
-  gustfactor(const sector& s, const vector<float>& g) 
+  gustfactor(const sector& s, const vector<float>& g)
     : DDsec(s) , gf(g) {}
-  
+
   bool isinside(const float a) const { return DDsec.isinside(a); }
   float value(int i){return gf[i] ;}
 };
@@ -81,7 +81,7 @@ public:
 class station {
 
 public:
-  miString name;              // station name (i.e. ENAN)
+  miutil::miString name;              // station name (i.e. ENAN)
   vector<gustfactor> gust;    // vector with all gf-vectors/sort.by DD
   vector<sector> FFsec;       // the FF sectors (station depended)
   bool getSTgust(float DD,float FF, float& gf );
@@ -108,9 +108,9 @@ private:
   vector<station> stations;   // vector with all stations
 public:
   tafGF() {}
-  bool readIn(miString fname);
-  bool getGustFact(miString name, float DD,float FF, float& gf);
-  bool getGust(miString Name, float DD,float FF, float& gf);
+  bool readIn(miutil::miString fname);
+  bool getGustFact(miutil::miString name, float DD,float FF, float& gf);
+  bool getGust(miutil::miString Name, float DD,float FF, float& gf);
 
 };
 

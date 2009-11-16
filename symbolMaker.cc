@@ -1,6 +1,6 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -32,17 +32,19 @@
 #include <fstream>
 #include "symbolMaker.h"
 
+using namespace std;
+using namespace miutil;
 using namespace puMathAlgo;
 
-// initializes the symbols with an 
-// internal number and the WMO-code  
+// initializes the symbols with an
+// internal number and the WMO-code
 const float DUMMY = -999;
 
 int      symbolMaker::MAXcustom=-1000;
 int      symbolMaker::MINcustom=1000;
-miSymbol symbolMaker::sun(1,false) ;                           
-miSymbol symbolMaker::lightCloud(2,false);                      
-miSymbol symbolMaker::partlyCloud(3,false);                     
+miSymbol symbolMaker::sun(1,false) ;
+miSymbol symbolMaker::lightCloud(2,false);
+miSymbol symbolMaker::partlyCloud(3,false);
 miSymbol symbolMaker::cloud(4,false);
 miSymbol symbolMaker::fog(5,true);
 miSymbol symbolMaker::lightRainSun(10,true);
@@ -57,7 +59,7 @@ miSymbol symbolMaker::RainThunder(2000,true);
 miSymbol symbolMaker::SnowThunder(3000,true);
 miSymbol symbolMaker::errorSymbol(999,true);
 
-static bool fogstatus = true; 
+static bool fogstatus = true;
 static bool visiblestatus = false;
 static bool picturestatus = false;
 static bool longterm = false;
@@ -68,9 +70,9 @@ static bool longterm = false;
 // reads symbol data from file, and builds the classes for symbols out of it
 
 void symbolMaker::readSymbols(miString SymbolFname){
-  MAXcustom = -1000; 
+  MAXcustom = -1000;
   MINcustom =  1000;
-  
+
   code normal;
   code darkness;
 
@@ -81,7 +83,7 @@ void symbolMaker::readSymbols(miString SymbolFname){
   int darkIndex, normalIndex;
   int Vision;
   vector<miString> words;
-  
+
 
 
 
@@ -98,17 +100,17 @@ void symbolMaker::readSymbols(miString SymbolFname){
     readMi.trim();
     if(readMi.contains("#") )
       continue;
-   
+
     // flags
 
     if(readMi.contains("FOGSTATUS"))
        if(readMi.contains("false"))
 	  fogstatus = false;
-    
+
     if(readMi.contains("VISIBILITY"))
        if(readMi.contains("true"))
 	  visiblestatus = true;
-    
+
     if(readMi.contains("PICTURES"))
        if(readMi.contains("true"))
 	  picturestatus = true;
@@ -139,8 +141,8 @@ void symbolMaker::readSymbols(miString SymbolFname){
       darkName.trim();
         if(picturestatus){
 	getline(codeFile,darkPic);
-	darkPic.trim(); 
-        }	
+	darkPic.trim();
+        }
 
       // here starts the input of the symboldependet
       // first guess for the vision
@@ -151,7 +153,7 @@ void symbolMaker::readSymbols(miString SymbolFname){
 
       if( darkIndex > MAXcustom)
 	MAXcustom = darkIndex; // 2000-11-17: normalIndex here!!
-      
+
       if(normalIndex < MINcustom)
 	MINcustom = normalIndex;
 
@@ -164,52 +166,52 @@ void symbolMaker::readSymbols(miString SymbolFname){
 
       if(className == "SUN")
 	sun.AddCodes(normal,darkness);
-	
+
       if(className == "LIGHTCLOUD")
 	lightCloud.AddCodes(normal,darkness);
-	
+
       if(className == "PARTLYCLOUD")
 	partlyCloud.AddCodes(normal,darkness);
 
       if(className == "CLOUD")
 	cloud.AddCodes(normal,darkness);
-     
+
       if(className == "FOG")
 	fog.AddCodes(normal,darkness);
-	
+
       if(className == "LIGHTRAINSUN")
 	lightRainSun.AddCodes(normal,darkness);
-     
+
       if(className == "LIGHTRAIN")
 	lightRain.AddCodes(normal,darkness);
-	
+
       if(className == "RAIN")
 	rain.AddCodes(normal,darkness);
-       
+
       if(className == "SLEETSUN")
 	sleetSun.AddCodes(normal,darkness);
-	
+
       if(className == "SNOWSUN")
 	snowSun.AddCodes(normal,darkness);
-	
+
       if(className == "SLEET")
 	sleet.AddCodes(normal,darkness);
-	
+
       if(className == "SNOW")
 	snow.AddCodes(normal,darkness);
-    
+
       if(className == "LIGHTRAINTHUNDERSUN")
 	lightRainThunderSun.AddCodes(normal,darkness);
-	
+
       if(className == "RAINTHUNDER")
 	RainThunder.AddCodes(normal,darkness);
-	
+
       if(className == "SNOWTHUNDER")
-	SnowThunder.AddCodes(normal,darkness);  
+	SnowThunder.AddCodes(normal,darkness);
 
       if(className == "ERROR")
 	errorSymbol.AddCodes(normal,darkness);
-      
+
     }
   }
   codeFile.close();
@@ -234,12 +236,12 @@ bool symbolMaker::initializeModel(vector<paramet> AllData)
   agr.erase();
   lli.erase();
   fogi.erase();
- 
+
   for (int i=0; i < AllData.size(); i++){
-     
+
     if(AllData[i].paraNO == t2m.paraNO)
       t2m  = AllData[i];
-          
+
     if(AllData[i].paraNO == rrf.paraNO)
       rrf = AllData[i];
 
@@ -263,10 +265,10 @@ bool symbolMaker::initializeModel(vector<paramet> AllData)
 
     if(AllData[i].paraNO == ct.paraNO)
       ct = AllData[i];
-    
+
     if(AllData[i].paraNO == agr.paraNO)
       agr = AllData[i];
-    
+
     if(AllData[i].paraNO == lli.paraNO)
       lli = AllData[i];
 
@@ -280,7 +282,7 @@ bool symbolMaker::initializeModel(vector<paramet> AllData)
 };
 
 // checks out for periods of rain and computes
-// averaged values of the prec. and clouds of the 6 or 12 hours 
+// averaged values of the prec. and clouds of the 6 or 12 hours
 // round the forecast termin. (dependet on the input)
 
 void symbolMaker::periods(vector<miTime> termin,
@@ -309,7 +311,7 @@ void symbolMaker::periods(vector<miTime> termin,
   cheight.erase();
   ctotal.erase();
 
-  for(int i = 0; i < termin.size(); i++){  
+  for(int i = 0; i < termin.size(); i++){
     nrr0 = 0;
     nrr1 = 0;
     rrto = DUMMY;
@@ -317,8 +319,8 @@ void symbolMaker::periods(vector<miTime> termin,
 
     // compute new min/max
     if (compute_minmax){
-      
-      if (i == 0) { 
+
+      if (i == 0) {
 	runTerm  = termin[i];
 	runTerm.addHour(-min+1);
 	stopTerm = termin[i];
@@ -337,15 +339,15 @@ void symbolMaker::periods(vector<miTime> termin,
 	stopTerm.addHour(diff);
 	runTerm.addHour(1);
       }
-//       cerr << "--runTerm:" << runTerm 
-// 	   << " termin:" << termin[i] 
+//       cerr << "--runTerm:" << runTerm
+// 	   << " termin:" << termin[i]
 // 	   << " stopTerm:" << stopTerm << endl;
 
     } else {
 
       runTerm  = termin[i];
       stopTerm = termin[i];
-      
+
       runTerm.addHour(-min);
       stopTerm.addHour(max);
     }
@@ -368,7 +370,7 @@ void symbolMaker::periods(vector<miTime> termin,
 	  latitude = rrf.lat();
 	}
 	else if(rrconv != DUMMY && rrfront != DUMMY)
-	  rrtot = rrfront + rrconv;  
+	  rrtot = rrfront + rrconv;
       }
 
       if(rrtot !=  DUMMY){
@@ -385,7 +387,7 @@ void symbolMaker::periods(vector<miTime> termin,
 	avRR.add(rrto) ;
 	rrto = DUMMY;
       }
-  
+
       avCL.add( cl.value(runTerm ) ) ;
       avCS.add( cs.value(runTerm ) ) ;
       avCM.add( cm.value(runTerm ) ) ;
@@ -393,7 +395,7 @@ void symbolMaker::periods(vector<miTime> termin,
       avCT.add( ct.value(runTerm ) ) ;
 
       runTerm.addHour(1);
-    }  
+    }
     periodOfRain.push(termin[i], nrr1);
     periodOfNoRain.push(termin[i],nrr0);
     rrtotal.push( termin[i], avRR.middle());
@@ -437,7 +439,7 @@ bool symbolMaker::cloudMaker(miTime now){
       cmiddle.value(now) > 15 ||
       cheight.value(now) > 25 )
     symbol = lightCloud;
-  
+
   if (csurf.value(now)   > 45 ||
       clow.value(now)    > 45 ||
       cmiddle.value(now) > 45 ||
@@ -453,7 +455,7 @@ bool symbolMaker::cloudMaker(miTime now){
 
  //  if(fogstatus && csurf.value(now) > 75 )
 //     symbol = fog;
-  
+
   return(true);
 };
 
@@ -465,7 +467,7 @@ bool symbolMaker::rainMaker(miTime now){
   float rrNow   = rrtotal.value(now);
   float pRain   = periodOfRain.value(now);
   float noRain  = periodOfNoRain.value(now);
- 
+
   if(rrtotal.value(now) == DUMMY){
     symbol = myerror;
     return(false);
@@ -474,16 +476,16 @@ bool symbolMaker::rainMaker(miTime now){
   if(longterm)
     rrNow/=2;
 
- 
+
 
   // changes: 2002-08-21
   // range 0.1 -> 0.2
   // range 0.3 -> 0.6
- 
 
 
-  if(rrNow> 0.2 || pRain > 0 ){ 
- 
+
+  if(rrNow> 0.2 || pRain > 0 ){
+
     if(symbol == sun   ||  symbol == lightCloud )
       symbol = lightRainSun ;
 
@@ -511,7 +513,7 @@ bool symbolMaker::rainMaker(miTime now){
 bool symbolMaker::tempMaker(miTime now){
 
   float temperature;
-  
+
   myerror.AddErr("DATA ERROR > NO TEMPERATURE DATA");
 
   temperature = t2m.value(now);
@@ -537,14 +539,14 @@ bool symbolMaker::tempMaker(miTime now){
       symbol = snow;
     if(temperature > 0.5 && temperature < 1.5 )
       symbol = sleet;
-  }       
+  }
   return(true);
 };
 
 // main program
 
 
-vector<miSymbol> 
+vector<miSymbol>
 symbolMaker::
 computeWithoutStateOfAggregate( const vector<paramet> &AllModelData,
 		                          const vector<miTime> &termin,
@@ -559,10 +561,10 @@ computeWithoutStateOfAggregate( const vector<paramet> &AllModelData,
     cloudMaker( termin[yet] );
     if(symbol != myerror)
       rainMaker(  termin[yet] );
- 
+
     symbol.setTime(termin[yet]);
     symbol.setLightStat(termin[yet],latitude);
-    tmpSymbols.push_back(symbol);   
+    tmpSymbols.push_back(symbol);
   }
 
   return(tmpSymbols);
@@ -583,10 +585,10 @@ vector<miSymbol> symbolMaker::compute(vector<paramet> AllModelData,vector<miTime
       rainMaker(  termin[yet] );
     if(symbol != myerror)
       tempMaker(  termin[yet] );
-    
+
     symbol.setTime(termin[yet]);
     symbol.setLightStat(termin[yet],latitude);
-    tmpSymbols.push_back(symbol);   
+    tmpSymbols.push_back(symbol);
   }
   return(tmpSymbols);
 
@@ -598,7 +600,7 @@ miSymbol symbolMaker::getSymbol(int Cnumber){
   miSymbol tmp;
 
   for ( int testlight = 1; testlight >= 0; testlight-- ){
-    
+
    if(Cnumber == sun.customNumber(testlight)){
      tmp = sun;
      tmp.setLightStat(testlight);
@@ -655,7 +657,7 @@ miSymbol symbolMaker::getSymbol(int Cnumber){
      return tmp;
    }
    if(Cnumber ==  snow.customNumber(testlight)){
-     tmp = snow;   
+     tmp = snow;
      tmp.setLightStat(testlight);
      return tmp;
    }
@@ -684,9 +686,9 @@ miSymbol symbolMaker::getSymbol(int Cnumber){
 
 
 bool symbolMaker::signChange(int custom1, int custom2){
-  
+
   miSymbol symbol1, symbol2;
-  
+
   symbol1 = getSymbol(custom1);
   symbol2 = getSymbol(custom2);
 
@@ -701,7 +703,7 @@ bool symbolMaker::signChange(int custom1, int custom2){
 
 
 bool symbolMaker::isDry(int custom ){
-  
+
   miSymbol tmpSym;
 
   tmpSym = getSymbol( custom);
@@ -718,7 +720,7 @@ bool symbolMaker::isDry(int custom ){
 
 
 bool symbolMaker::isPrecip(int custom ){
-  
+
   miSymbol tmpSym;
 
   tmpSym = getSymbol( custom);
@@ -736,7 +738,7 @@ bool symbolMaker::isPrecip(int custom ){
 
 
 bool symbolMaker::isShower(int custom ){
-  
+
   miSymbol tmpSym;
 
   tmpSym = getSymbol( custom);
@@ -757,8 +759,8 @@ void symbolMaker::make_pos_symbols(map<int,int>& index,
   image.clear();
 
   index[errorSymbol.customNumber(true)] = 0;
-  index[sun.customNumber(true)] = 1 ;                           
-  index[lightCloud.customNumber(true)] = 2;                      
+  index[sun.customNumber(true)] = 1 ;
+  index[lightCloud.customNumber(true)] = 2;
   index[partlyCloud.customNumber(true)] = 3;
   index[cloud.customNumber(true)] = 4;
   index[lightRainSun.customNumber(true)] = 5;
@@ -772,12 +774,12 @@ void symbolMaker::make_pos_symbols(map<int,int>& index,
   index[snow.customNumber(true)] = 13;
   index[SnowThunder.customNumber(true)] = 14;
   index[fog.customNumber(true)] = 15;
-  
+
   index[sun.customNumber(false)] = 16;
   index[partlyCloud.customNumber(false)] = 17;
   index[lightRainSun.customNumber(false)] =18;
   index[snowSun.customNumber(false)] = 19;
- 
+
 
   image[0]  = errorSymbol.picture(true);
   image[1]  = sun.picture(true);
@@ -795,12 +797,12 @@ void symbolMaker::make_pos_symbols(map<int,int>& index,
   image[13] = snow.picture(true);
   image[14] = SnowThunder.picture(true);
   image[15] = fog.picture(true);
-  
+
   image[16] = sun.picture(false);
   image[17] = partlyCloud.picture(false);
   image[18] = lightRainSun.picture(false);
   image[19] = snowSun.picture(false);
- 
+
 
 };
 
@@ -825,10 +827,10 @@ vector<miSymbol> symbolMaker::compute_new(vector<paramet> AllModelData,vector<mi
       lightningMaker(termin[yet]);
     if(symbol != myerror)
       fogMaker(termin[yet]);
-    
+
     symbol.setTime(termin[yet]);
     symbol.setLightStat(termin[yet],latitude);
-    tmpSymbols.push_back(symbol);   
+    tmpSymbols.push_back(symbol);
   }
   return(tmpSymbols);
 };
@@ -836,7 +838,7 @@ vector<miSymbol> symbolMaker::compute_new(vector<paramet> AllModelData,vector<mi
 
 
 
-bool 
+bool
 symbolMaker::
 stateMaker(miTime now)
 {
@@ -849,38 +851,38 @@ stateOfAggregateFromTemperature( float temperature )
 {
 	if( temperature == FLT_MAX || temperature <= DUMMY )
 		return INT_MAX;
-	
+
 	if(temperature <= 0.5 )
 	   return 0; //Snow
-	
+
 	if(temperature > 0.5 && temperature < 1.5 )
 		return 1; //Sleet
-	
+
 	return 2; //rain
 }
 
 
-bool 
+bool
 symbolMaker::
 stateMaker( miSymbol &symbol_,
-		      float temperature, 
+		      float temperature,
 			   float stateOfAggregate,
 		      float lightningIndex,
 		      float fogIndex )
 {
 
   int state;
-  miSymbol oldSymbol = symbol_; //Save time and lightstate 
-  
+  miSymbol oldSymbol = symbol_; //Save time and lightstate
+
   miSymbol myErrorSymbol( errorSymbol );
   myErrorSymbol.AddErr("DATA ERROR > NO STATE OR TEMPERATURE DATA");
 
-  if( stateOfAggregate == FLT_MAX || stateOfAggregate <= DUMMY) 
+  if( stateOfAggregate == FLT_MAX || stateOfAggregate <= DUMMY)
 	  state = stateOfAggregateFromTemperature( temperature );
   else
 	  state = int( stateOfAggregate );
-  
-  
+
+
   // state: 0=snow, 1=sleet, 2=rain
 
 
@@ -906,21 +908,21 @@ stateMaker( miSymbol &symbol_,
       symbol_ = snow;
     if(state == 1 )
       symbol_ = sleet;
-  }       
+  }
 
   if( symbol_ == snow ){
     if(state == 1 )
       symbol_ = sleet;
     if(state == 2 )
       symbol_ = rain;
-  }       
-  
+  }
+
   if( symbol_ == snowSun){
     if(state == 1 )
       symbol_ = sleetSun;
     if(state == 2 )
       symbol_ = lightRainSun;
-  }       
+  }
 
 
   if( symbol_ == sleet) {
@@ -936,21 +938,21 @@ stateMaker( miSymbol &symbol_,
     if(state == 2 )
       symbol_ = lightRainSun;
   }
-  
+
   lightningMaker( symbol_, lightningIndex );
   fogMaker( symbol_, fogIndex );
 
-  //Restore time and lightstate 
+  //Restore time and lightstate
   symbol_.setTime( oldSymbol.getTime() );
   symbol_.setLightStat( oldSymbol.getLightStat() );
- 
+
   return true;
 };
 
 
 
 
-bool 
+bool
 symbolMaker::lightningMaker(miTime now){
 
 	lightningMaker( symbol, lli.value( now ) );
@@ -964,21 +966,21 @@ lightningMaker( miSymbol &symbol_, float lightningIndex )
 {
 	if( lightningIndex == FLT_MAX || lightningIndex <= DUMMY )
 		return;
-		
+
 	int lightning = int( lightningIndex );
-   
+
 	if( lightning != 1 )
 		return;
-	 
-	if( symbol_ == lightRainSun || 
+
+	if( symbol_ == lightRainSun ||
 		 symbol_ == lightRain    ||
        symbol_ == sleetSun       )
 		symbol_ = lightRainThunderSun;
-  
+
 	if( symbol_ == rain )
 	  symbol_ = RainThunder;
 
-	if(symbol_ == snow    || 
+	if(symbol_ == snow    ||
 		symbol_ == snowSun ||
       symbol_ == sleet     )
 		symbol_ = SnowThunder;
@@ -991,30 +993,30 @@ fogMaker( miSymbol &symbol_, float fogIndex)
 {
 	if( fogIndex == FLT_MAX || fogIndex <= DUMMY )
 		return;
-	
+
   int foi = int( fogIndex );
-   
+
   if (foi == 0 )
     return;
-  
+
   symbol_ = fog;
 };
 
 
 
-bool 
+bool
 symbolMaker::
 fogMaker( miTime now )
 {
 	fogMaker( symbol, fogi.value(now) );
-	
+
 	return true;
 };
 
 
 vector<float> symbolMaker::water_state(vector<float> temp)
 {
-  
+
   int sz = temp.size();
   vector<float> state;
   float t,s;
@@ -1032,7 +1034,7 @@ vector<float> symbolMaker::water_state(vector<float> temp)
       s = 1;
     }
     state.push_back(s);
-      
+
   }
   return state;
 

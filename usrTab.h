@@ -1,6 +1,6 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -44,40 +44,40 @@ using namespace std;
 
 class usrTab {
 private:
-  map<miString, miString> entity;
-  miString mNull;
-public: 
+  map<miutil::miString, miutil::miString> entity;
+  miutil::miString mNull;
+public:
   usrTab(): mNull("") {}
 
-  bool create( miString );
- 
-  bool exists(miString m) const 
+  bool create( miutil::miString );
+
+  bool exists(miutil::miString m) const
   { return ( bool(entity.count(m)) ? true: false);}
 
-  miTime dates( miString );
- 
-  miString content( miString m) 
+  miutil::miTime dates( miutil::miString );
+
+  miutil::miString content( miutil::miString m)
   { return ( bool(entity.count(m)) ? entity[m] : mNull); }
 
-  miString replace( miString m) 
+  miutil::miString replace( miutil::miString m)
   { return ( bool(entity.count(m)) ? entity[m] : m);}
 
-  miString file( miString m)
+  miutil::miString file( miutil::miString m)
   { return entity["WORKDIR"]+ content(m); }
-   
-  void makeByHand(miString m, miString requ)
+
+  void makeByHand(miutil::miString m, miutil::miString requ)
   { entity[m]= requ;}
 
-  int numInt(miString m) 
+  int numInt(miutil::miString m)
     { return atoi(entity[m].cStr());}
-  
-  float numFloat( miString m)  
+
+  float numFloat( miutil::miString m)
     { return atof(entity[m].cStr());}
 
-  miString operator[] ( const miString &m )
+  miutil::miString operator[] ( const miutil::miString &m )
   { return ( bool(entity.count(m)) ? entity[m] : mNull); }
 
-  map<miString,miString> selected(const vector<miString> & );
+  map<miutil::miString,miutil::miString> selected(const vector<miutil::miString> & );
 
 
 

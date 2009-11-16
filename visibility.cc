@@ -1,6 +1,6 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -31,15 +31,15 @@
 
 
 // REMARKS:
-//   If crain and cfrzr = 0 and cicep and csnow = 0; 
+//   If crain and cfrzr = 0 and cicep and csnow = 0;
 //   then qc determines vis alone.
-//   if crain or cfrzr =1 and cicep and csnow = 0; 
+//   if crain or cfrzr =1 and cicep and csnow = 0;
 //   then qc and qr determine   vis;
-//   if crain or cfrzr =1 and cicep or csnow =1; 
+//   if crain or cfrzr =1 and cicep or csnow =1;
 //   then qc and a combo of 50 percent rain and snow is used to determine vis;
-//   if crain or cfrzr =0 and cicep or csnow =1; 
+//   if crain or cfrzr =0 and cicep or csnow =1;
 //   then qc and qs deternine   vis;
-//                                                                       
+//
 //   The routine uses the following
 //   expressions for extinction coefficient, beta (in km**-1),
 //   with C being the mass concentration (in g/m**3):
@@ -67,11 +67,11 @@
 //
 //   This procedure was first developed by Stoelinga and Warner, adapted to the
 //   eta model postprocessor by Geoff Manakin, and adapted by Larry Burroughs for
-//   use with the GFS to replace the statistical open ocean fog and visibility	
+//   use with the GFS to replace the statistical open ocean fog and visibility
 //   system.
-//                 
+//
 #include <puTools/miString.h>
-                                                      
+
 double visibility(const double&  qv,     // water vapor mixing ratio (kg/kg)
 		  const double&  qc,     // cloud water mixing ratio (kg/kg)
 		  const double&  qr,     // rain water mixing ratio  (kg/kg)
@@ -80,7 +80,7 @@ double visibility(const double&  qv,     // water vapor mixing ratio (kg/kg)
 		  const int&     crain,  // categorical rain         (y=1,n=0)
 		  const int&     cfrzr,  // categorical freezing rain(y=1,n=0)
 		  const int&     cicep,  // categorical ice pellets  (y=1.n=0)
-		  const int&     csnow)  // categorical snow         (y=1,n=0) 
+		  const int&     csnow)  // categorical snow         (y=1,n=0)
 {
 
 
@@ -95,7 +95,7 @@ double visibility(const double&  qv,     // water vapor mixing ratio (kg/kg)
   const double exponfp= 0.7776;
   const double rhoice = 916.8;
   const double rhowat = 997.37;
-  
+
   const double const1 = -log(0.02);
   double sh     = qv/(1+qv);
   double tv     = ta*(1.0+0.608*sh);
@@ -145,8 +145,8 @@ double visibility(const double&  qv,     // water vapor mixing ratio (kg/kg)
   double betav=coeffc*pow(concfc,exponfc)+coeffp*pow(concfp,exponfp)
     +coeflc*pow(conclc,exponlc)+coeflp*pow(conclp,exponlp)+1.e-10;
 
-  cerr <<"betav:"<<betav<<endl;
-  cerr <<"const1:"<<const1<<endl;
+  std::cerr << "betav:" << betav << std::endl;
+  std::cerr << "const1:" << const1 << std::endl;
 
 //  vis      - visual range in m (not km)
 
@@ -157,7 +157,7 @@ double visibility(const double&  qv,     // water vapor mixing ratio (kg/kg)
 
   return vis;
 
-}    
+}
 
 
 

@@ -144,8 +144,8 @@ public:
       myerror(errorSymbol) {}
 
   bool initializeModel(vector<paramet>);
-  static void readSymbols(miString);
-  void periods(vector<miTime>,int,int,bool compute_minmax = false);
+  static void readSymbols(miutil::miString);
+  void periods(vector<miutil::miTime>,int,int,bool compute_minmax = false);
 
   /**
    * This function creates a symbol that is not adjusted with repect on
@@ -156,21 +156,21 @@ public:
 	*                     float fogIndex )
 	*/
   vector<miSymbol> computeWithoutStateOfAggregate( const vector<paramet> &AllModelData,
-  		                                             const vector<miTime> &termin,
+  		                                             const vector<miutil::miTime> &termin,
   				      				                     int min = 3,int max = 6);
 
 
-  vector<miSymbol> compute(vector<paramet>, vector<miTime>,int,int);
-  vector<miSymbol> compute_new(vector<paramet>, vector<miTime>,
+  vector<miSymbol> compute(vector<paramet>, vector<miutil::miTime>,int,int);
+  vector<miSymbol> compute_new(vector<paramet>, vector<miutil::miTime>,
 			       int,int,bool compute_minmax = false);
   vector<float>    water_state(vector<float>);
 
 
   static miSymbol getErrorSymbol() { return errorSymbol; }
 
-  bool cloudMaker(miTime);
-  bool rainMaker(miTime);
-  bool tempMaker(miTime);
+  bool cloudMaker(miutil::miTime);
+  bool rainMaker(miutil::miTime);
+  bool tempMaker(miutil::miTime);
 
 
   /**
@@ -230,7 +230,7 @@ public:
 
 
 
-  bool stateMaker( miTime );
+  bool stateMaker( miutil::miTime );
 
   /**
    * If there is lightning add lightning to the symbolg. The lightningIndex
@@ -243,7 +243,7 @@ public:
   static void lightningMaker( miSymbol &symbol_,
 		                        float lightningIndex );
 
-  bool lightningMaker(miTime);
+  bool lightningMaker(miutil::miTime);
 
   /**
    * If there is fog set the symbol to fog. The fogIndex
@@ -254,7 +254,7 @@ public:
    */
   static void fogMaker( miSymbol &symbol_, float fogIndex);
 
-  bool fogMaker(miTime);
+  bool fogMaker(miutil::miTime);
 
   bool signChange(int, int);
   miSymbol getSymbol(int );
@@ -265,7 +265,7 @@ public:
 
   static int maxCustom() { return MAXcustom;}
   static int minCustom() { return MINcustom;}
-  void make_pos_symbols(map<int,int>&, map<int,miString>& );
+  void make_pos_symbols(map<int,int>&, map<int,miutil::miString>& );
 };
 
 #endif

@@ -1,6 +1,6 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -50,21 +50,21 @@ private:
   static float DUMMY;
   int paraNO;                  //  Parameter Number i.e. 31 for t2m
   float glat;                  //  latitude of the station for lightstatus
-  map<miTime,float> mapVal;
+  map<miutil::miTime,float> mapVal;
 public:
   paramet(){}
   paramet(const int& n)
     : paraNO(n){}
-  paramet(const int& n,const map<miTime,float>& a )
+  paramet(const int& n,const map<miutil::miTime,float>& a )
     : paraNO(n), mapVal(a) {}
 
   float lat() const {return glat;}
-  float value(miTime);
-  miTime getTime(int);
+  float value(miutil::miTime);
+  miutil::miTime getTime(int);
   int size() const {return mapVal.size();};
-  void  push(miTime, float);
+  void  push(miutil::miTime, float);
   void  erase();
-  void  AddPara(const int& n,const map<miTime,float>& a,const float& gl = 60){
+  void  AddPara(const int& n,const map<miutil::miTime,float>& a,const float& gl = 60){
     paraNO = n;
     glat = gl;
     mapVal = a;
