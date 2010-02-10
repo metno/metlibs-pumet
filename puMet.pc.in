@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: puMet
 Description: The puMet Library
 Version: @VERSION@
-Requires: puTools >= 3.1.0
+Requires: @puMet_pc_requires@
 Libs: -L${libdir} -lpuMet
 Cflags: -I${includedir}
