@@ -30,6 +30,10 @@
 
 // returns the termin specific value of the requested parameter
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "paramet.h"
 
 using namespace std;

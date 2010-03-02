@@ -32,6 +32,10 @@
 /* Created by met.no/PU 
    at Fri Apr  6 12:22:41 2001 */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 int ff2beaufort(int ff)
 {
   if(ff < 1)

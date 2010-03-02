@@ -32,6 +32,10 @@
 // from the wind speed and the  wind direction for several
 // airports in Norway
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <fstream>
 #include "gust.h"
 

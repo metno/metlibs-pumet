@@ -33,6 +33,10 @@
 // vision index you get from miSymbol. The translation can after
 // intitialising direct be used by miSymbol....
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "vision.h"
 
 using namespace std;

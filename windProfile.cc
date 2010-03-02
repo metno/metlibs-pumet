@@ -37,6 +37,10 @@
 // developed by j.schulze in may 98.
 // last modified june 98
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "windProfile.h"
 
 using namespace std;
