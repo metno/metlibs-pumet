@@ -34,7 +34,7 @@ libpuMet_la_LDFLAGS = \
 libpuMet_la_LIBADD = \
 	${PUTOOLS_LIBS}
 
-pkg_includedir= ${prefix}/include/puMet
+pkg_includedir= ${includedir}/puMet
 
 pkg_include_HEADERS = \
 	addWeather.h \
