@@ -48,8 +48,6 @@
 #include <math.h>
 
 
-
-
 // this program is used to compute weather symbols from
 // cloud, precip and temperature data.
 // The symbols er created by a file, which can be edited.
@@ -67,8 +65,6 @@
 
 // initializes by construction the ident numbers of the
 // requested parameters, sorts the model input and does the job
-
-using namespace std;
 
 class symbolMaker{
   friend class cloudGrp;
@@ -143,9 +139,9 @@ public:
       fogi(665),
       myerror(errorSymbol) {}
 
-  bool initializeModel(vector<paramet>);
+  bool initializeModel(std::vector<paramet>);
   static void readSymbols(miutil::miString);
-  void periods(vector<miutil::miTime>,int,int,bool compute_minmax = false);
+  void periods(std::vector<miutil::miTime>,int,int,bool compute_minmax = false);
 
   /**
    * This function creates a symbol that is not adjusted with repect on
@@ -155,15 +151,15 @@ public:
 	*                     float lightningIndex,
 	*                     float fogIndex )
 	*/
-  vector<miSymbol> computeWithoutStateOfAggregate( const vector<paramet> &AllModelData,
-  		                                             const vector<miutil::miTime> &termin,
+  std::vector<miSymbol> computeWithoutStateOfAggregate( const std::vector<paramet> &AllModelData,
+  		                                             const std::vector<miutil::miTime> &termin,
   				      				                     int min = 3,int max = 6);
 
 
-  vector<miSymbol> compute(vector<paramet>, vector<miutil::miTime>,int,int);
-  vector<miSymbol> compute_new(vector<paramet>, vector<miutil::miTime>,
+  std::vector<miSymbol> compute(std::vector<paramet>, std::vector<miutil::miTime>,int,int);
+  std::vector<miSymbol> compute_new(std::vector<paramet>, std::vector<miutil::miTime>,
 			       int,int,bool compute_minmax = false);
-  vector<float>    water_state(vector<float>);
+  std::vector<float>    water_state(std::vector<float>);
 
 
   static miSymbol getErrorSymbol() { return errorSymbol; }
@@ -265,7 +261,7 @@ public:
 
   static int maxCustom() { return MAXcustom;}
   static int minCustom() { return MINcustom;}
-  void make_pos_symbols(map<int,int>&, map<int,miutil::miString>& );
+  void make_pos_symbols(std::map<int,int>&, std::map<int,miutil::miString>& );
 };
 
 #endif

@@ -44,8 +44,6 @@
 // stores the single point speed at height z and z itself
 // used private by class Uprofile
 
-using namespace std;
-
 class values {
   friend class Uprofile;
 private:
@@ -85,7 +83,7 @@ class Uprofile {
 private:
   miutil::miString errorOut;
   double Ustar ;
-  vector <values> wind;
+  std::vector <values> wind;
   double Ri;
   bool stability(double z, double speedZ);
 public:
@@ -95,7 +93,7 @@ public:
   void editRi(double rich);
   float compute( double zref,double speedZref, double z);
   bool  compute( double zref,double speedZref, double z, double increm);
-  bool  compute( double zref,double speedZref, vector <double> z);
+  bool  compute( double zref,double speedZref, std::vector <double> z);
 
   int length() const {return wind.size();};
 
@@ -104,7 +102,7 @@ public:
   double gust(double z, double spd);
   double gust(int i);
   double getRi() const {return Ri;}
-  void error(){cout<<errorOut<<endl;};
+  void error(){std::cout<<errorOut<<std::endl;};
 };
 
 #endif

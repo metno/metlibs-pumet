@@ -48,8 +48,6 @@
 // pass the wind direction into a sector and the
 // wind speed into a range (minimum and maximum)
 
-using namespace std;
-
 class sector {
 private:
   float a1, a2;          // sector minimum and maximum
@@ -65,10 +63,10 @@ public:
 class gustfactor {
 private:
   sector  DDsec;         // sector (DD depended)
-  vector<float> gf;      // gustfactor for different wind speeds
+  std::vector<float> gf;      // gustfactor for different wind speeds
 public:
   gustfactor(){}
-  gustfactor(const sector& s, const vector<float>& g)
+  gustfactor(const sector& s, const std::vector<float>& g)
     : DDsec(s) , gf(g) {}
 
   bool isinside(const float a) const { return DDsec.isinside(a); }
@@ -82,8 +80,8 @@ class station {
 
 public:
   miutil::miString name;              // station name (i.e. ENAN)
-  vector<gustfactor> gust;    // vector with all gf-vectors/sort.by DD
-  vector<sector> FFsec;       // the FF sectors (station depended)
+  std::vector<gustfactor> gust;    // vector with all gf-vectors/sort.by DD
+  std::vector<sector> FFsec;       // the FF sectors (station depended)
   bool getSTgust(float DD,float FF, float& gf );
 };
 
@@ -105,7 +103,7 @@ public:
 
 class tafGF {
 private:
-  vector<station> stations;   // vector with all stations
+  std::vector<station> stations;   // vector with all stations
 public:
   tafGF() {}
   bool readIn(miutil::miString fname);

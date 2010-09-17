@@ -33,6 +33,7 @@
 
 #include "ptStatistics.h"
 
+using namespace std;
 
 // privates
 

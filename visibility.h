@@ -31,9 +31,6 @@
 #ifndef _visibility_h
 #define _visibility_h
 
-
-using namespace std; 
-
 //
 //   Prgmmr: L. D. Burroughs  org: W/NMC21    Date: 03-03-09             
 //   Program history log:                                                  

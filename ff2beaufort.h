@@ -31,13 +31,9 @@
 #ifndef _ff2beaufort_h
 #define _ff2beaufort_h
 
-
 /* Created by met.no/FoU/PU 
    at Fri Apr  6 12:21:53 2001 */
 
-using namespace std; 
-
 int ff2beaufort(int);
-
 
 #endif

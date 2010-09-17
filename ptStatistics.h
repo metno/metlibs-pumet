@@ -42,30 +42,28 @@
 #include <vector>
 #include <algorithm>
 
-using namespace std;
-
 class ptStatistics {
 private:
-  vector<float> allTimes;       // all dimensions all times
-  vector<int> decils;           // requested decils (place in the dim vect)
+  std::vector<float> allTimes;       // all dimensions all times
+  std::vector<int> decils;           // requested decils (place in the dim vect)
   int dimension;                // number of dimensions
   int tSteps;                   // time steps (vectorElements/dimensions)
   float decil;                  // Input decil ( 0.1 decil = 1 percentil)
-  void baseInit(const vector<float>&, int);
-  void init(const vector<float>&, int, float);
-  void init(const vector<float>&, int, vector<float>);
-  vector<float> compDecils();
-  vector<float> compMean();
+  void baseInit(const std::vector<float>&, int);
+  void init(const std::vector<float>&, int, float);
+  void init(const std::vector<float>&, int, std::vector<float>);
+  std::vector<float> compDecils();
+  std::vector<float> compMean();
 public:
   ptStatistics(){}
-  vector<float> getXdecil(const vector<float>&, int, float);
-  vector<float> getXdecil(const vector<float>&, int, vector<float>);
-  vector<float> getMedian(const vector<float>& a, int d)
+  std::vector<float> getXdecil(const std::vector<float>&, int, float);
+  std::vector<float> getXdecil(const std::vector<float>&, int, std::vector<float>);
+  std::vector<float> getMedian(const std::vector<float>& a, int d)
     {return getXdecil(a,d,5);}
 
-  vector<float> getMean(const vector<float>&, int);
-  vector<float> getStDev(const vector<float>&, int);
-  vector<float> getVar(const vector<float>&, int);
+  std::vector<float> getMean(const std::vector<float>&, int);
+  std::vector<float> getStDev(const std::vector<float>&, int);
+  std::vector<float> getVar(const std::vector<float>&, int);
 };
 
 #endif

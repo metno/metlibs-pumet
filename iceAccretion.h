@@ -31,9 +31,6 @@
 #ifndef _iceAccretion_h
 #define _iceAccretion_h
 
-
-using namespace std; 
-
 // Prgmmr: D. M. Feit   org: W/NMC21    date: 87-06-26
 // Program history log:                                                  
 //   87-06-26  D. M. Feit

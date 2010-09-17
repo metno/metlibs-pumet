@@ -34,8 +34,6 @@
 #include <puTools/miString.h>
 #include <vector>
 
-using namespace std;
-
 struct mapping{
   int index;
   miutil::miString txt[3];
@@ -43,7 +41,7 @@ struct mapping{
 
 class weatherSpec {
 protected:
-  vector<mapping> list;
+  std::vector<mapping> list;
 public:
   weatherSpec() {}
   void AddToList( int, miutil::miString,miutil::miString txt2 = "",miutil::miString txt3 = "" );

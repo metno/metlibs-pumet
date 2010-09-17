@@ -44,9 +44,6 @@
 #include <float.h>
 
 
-
-using namespace std;
-
 // class to hold a numeric weather identifier, and a string
 // with the description of the weather. This part of the symbol
 // is customer specific and should be read in  from file

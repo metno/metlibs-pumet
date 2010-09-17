@@ -40,11 +40,9 @@
 #include <math.h>
 #include <stdio.h>
 
-using namespace std;
-
 class usrTab {
 private:
-  map<miutil::miString, miutil::miString> entity;
+  std::map<miutil::miString, miutil::miString> entity;
   miutil::miString mNull;
 public:
   usrTab(): mNull("") {}
@@ -77,7 +75,7 @@ public:
   miutil::miString operator[] ( const miutil::miString &m )
   { return ( bool(entity.count(m)) ? entity[m] : mNull); }
 
-  map<miutil::miString,miutil::miString> selected(const vector<miutil::miString> & );
+  std::map<miutil::miString,miutil::miString> selected(const std::vector<miutil::miString> & );
 
 
 

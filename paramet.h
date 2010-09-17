@@ -39,10 +39,7 @@
 #include <vector>
 #include <map>
 
-using namespace std;
-
 // 2nd hold different time steps and a parameter number
-
 
 class paramet {
   friend class symbolMaker;
@@ -50,12 +47,12 @@ private:
   static float DUMMY;
   int paraNO;                  //  Parameter Number i.e. 31 for t2m
   float glat;                  //  latitude of the station for lightstatus
-  map<miutil::miTime,float> mapVal;
+  std::map<miutil::miTime,float> mapVal;
 public:
   paramet(){}
   paramet(const int& n)
     : paraNO(n){}
-  paramet(const int& n,const map<miutil::miTime,float>& a )
+  paramet(const int& n,const std::map<miutil::miTime,float>& a )
     : paraNO(n), mapVal(a) {}
 
   float lat() const {return glat;}
@@ -64,7 +61,7 @@ public:
   int size() const {return mapVal.size();};
   void  push(miutil::miTime, float);
   void  erase();
-  void  AddPara(const int& n,const map<miutil::miTime,float>& a,const float& gl = 60){
+  void  AddPara(const int& n,const std::map<miutil::miTime,float>& a,const float& gl = 60){
     paraNO = n;
     glat = gl;
     mapVal = a;

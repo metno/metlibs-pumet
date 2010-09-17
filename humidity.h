@@ -33,12 +33,8 @@
 
 #include <math.h>
 
-
-
 extern double rHumid(double t, double dew);
 extern double absHumid(double t, double dew);
 extern double magnus(double);
-
-
 
 #endif
