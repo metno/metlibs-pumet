@@ -31,9 +31,6 @@ libpuMet_la_LDFLAGS = \
 	${VERSION_INFO} \
 	${PUTOOLS_LDFLAGS}
 
-libpuMet_la_LIBADD = \
-	${PUTOOLS_LIBS}
-
 pkg_includedir= ${includedir}/puMet
 
 pkg_include_HEADERS = \
