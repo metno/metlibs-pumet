@@ -98,22 +98,26 @@ private:
 
   static int MAXcustom;
   static int MINcustom;
-  static miSymbol sun;
-  static miSymbol lightCloud;
-  static miSymbol partlyCloud;
-  static miSymbol cloud;
-  static miSymbol fog;
-  static miSymbol lightRainSun;
-  static miSymbol lightRain;
-  static miSymbol rain;
-  static miSymbol sleetSun;
-  static miSymbol snowSun;
-  static miSymbol sleet;
-  static miSymbol snow;
-  static miSymbol lightRainThunderSun;
+  static miSymbol Sun;
+  static miSymbol LightCloud;
+  static miSymbol PartlyCloud;
+  static miSymbol Cloud;
+  static miSymbol Fog;
+  static miSymbol LightRainSun;
+  static miSymbol LightRain;
+  static miSymbol Rain;
+  static miSymbol SleetSun;
+  static miSymbol SnowSun;
+  static miSymbol Sleet;
+  static miSymbol Snow;
+  static miSymbol LightRainThunderSun;
   static miSymbol RainThunder;
   static miSymbol SnowThunder;
-  static miSymbol errorSymbol;
+  static miSymbol SleetSunThunder;
+  static miSymbol SnowSunThunder;
+  static miSymbol LightRainThunder;
+  static miSymbol SleetThunder;
+  static miSymbol ErrorSymbol;
 
   miSymbol myerror;
 public:
@@ -137,7 +141,7 @@ public:
       lli(661),
       agr(170),
       fogi(665),
-      myerror(errorSymbol) {}
+      myerror(ErrorSymbol) {}
 
   bool initializeModel(std::vector<paramet>);
   static void readSymbols(miutil::miString);
@@ -153,7 +157,8 @@ public:
 	*/
   std::vector<miSymbol> computeWithoutStateOfAggregate( const std::vector<paramet> &AllModelData,
   		                                             const std::vector<miutil::miTime> &termin,
-  				      				                     int min = 3,int max = 6);
+  				      				                     int min = 3,int max = 6,
+  				      				                     bool useNewLightningMaker = false);
 
 
   std::vector<miSymbol> compute(std::vector<paramet>, std::vector<miutil::miTime>,int,int);
@@ -162,7 +167,7 @@ public:
   std::vector<float>    water_state(std::vector<float>);
 
 
-  static miSymbol getErrorSymbol() { return errorSymbol; }
+  static miSymbol getErrorSymbol() { return ErrorSymbol; }
 
   bool cloudMaker(miutil::miTime);
   bool rainMaker(miutil::miTime);
@@ -190,39 +195,33 @@ public:
    * The state is either form the model or we can compute it from
    * the temperature. Se the function stateOfAggregateFromTemperature( float temperature ).
    *
-   * +--------------+-----------------------------------+
-   * |              |            state                  |
-   * +--------------+---------+----------+--------------+
-   * | SYMBOL       |    0    |    1     |     2        |
-   * +--------------+---------+----------+--------------+
-   * | LIGHTRAINSUN | SNOWSUN | SLEETSUN |     -        |
-   * | LIGHTRAIN    | SNOW    | SLEET    |     -        |
-   * | RAIN         | SNOW    | SLEET    |     -        |
-   * | SNOW         |   -     | SLEET    | RAIN         |
-   * | SNOWSUN      |   -     | SLEETSUN | LIGHTRAINSUN |
-   * | SLEET        | SNOW    |    -     | RAIN         |
-   * | SLEETSUN     | SNOWSUN |    -     | LIGHTRAINSUN |
-   * +--------------+---------+----------+--------------+
-   *
-   * If there is lightning the symbol generated fom the table above
-   * vil be adjusted as follow.
-   *
-   *
-   * LIGTHRAINSUN -->  LIGHTRAINTHUNDERSUN
-   * LIGTHRAIN    -->  LIGHTRAINTHUNDERSUN
-   * SLEETSUN     -->  LIGHTRAINTHUNDERSUN
-   * RAIN         -->  RAINNTHUNDER
-   * SNOW         -->  SNOWTHUNDER
-   * SNOWSUN      -->  SNOWTHUNDER
-   * SLEET        -->  SNOWTHUNDER
+   * +---------------------+--------------------------------------------------------+
+   * |                     |                       state                            |
+   * +---------------------+----------------+-----------------+---------------------+
+   * | SYMBOL              |       0        |        1        |          2          |
+   * +---------------------+----------------+-----------------+---------------------+
+   * | LIGHTRAINSUN        | SNOWSUN        | SLEETSUN        |     -               |
+   * | LIGHTRAIN           | SNOW           | SLEET           |     -               |
+   * | RAIN                | SNOW           | SLEET           |     -               |
+   * | SNOW                |   -            | SLEET           | RAIN                |
+   * | SNOWSUN             |   -            | SLEETSUN        | LIGHTRAINSUN        |
+   * | SLEET               | SNOW           |    -            | RAIN                |
+   * | SLEETSUN            | SNOWSUN        |    -            | LIGHTRAINSUN        |
+   * | LIGHTRAINTHUNDERSUN | SNOWSUNTHUNDER | SLEETSUNTHUNDER |     -               |
+   * | RAINTHUNDER         | SNOWTHUNDER    | SLEETTHUNDER    |     -               |
+   * | LIGHTRAINTHUNDER    | SNOWTHUNDER    | SLEETTHUNDER    |     -               |
+   * | SLEETTHUNDER        | SNOWTHUNDER    |    -            | RAINTHUNDER         |
+   * | SLEETSUNTHUNDER     | SNOWSUNTHUNDER |    -            | LIGHTRAINTHUNDERSUN |
+   * | SNOWTHUNDER         |   -            | SLEETTHUNDER    | RAINTHUNDER         |
+   * | SNOWSUNTHUNDER      |   -            | SLEETSUNTHUNDER | LIGHTRAINTHUNDERSUN |
+   * | FOG                 |   -            |    -            |     -               |
+   * +---------------------+----------------+-----------------+---------------------+
    *
    * If there is fog, it will override all other symbols and the symbol is set to FOG.
    */
   static bool stateMaker( miSymbol &symbol_,
 	                       float temperature,
-		                    float stateOfAggregate = FLT_MAX,
-	                       float lightningIndex = FLT_MAX,
-	                       float fogIndex = FLT_MAX );
+		                    float stateOfAggregate = FLT_MAX  );
 
 
 
@@ -238,6 +237,9 @@ public:
 
   static void lightningMaker( miSymbol &symbol_,
 		                        float lightningIndex );
+
+  static void lightningMakerNew( miSymbol &symbol_,
+                                 float lightningIndex );
 
   bool lightningMaker(miutil::miTime);
 

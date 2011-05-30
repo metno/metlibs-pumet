@@ -44,24 +44,29 @@ const float DUMMY = -999;
 
 int symbolMaker::MAXcustom = -1000;
 int symbolMaker::MINcustom = 1000;
-miSymbol symbolMaker::sun(1, false);
-miSymbol symbolMaker::lightCloud(2, false);
-miSymbol symbolMaker::partlyCloud(3, false);
-miSymbol symbolMaker::cloud(4, false);
-miSymbol symbolMaker::fog(5, true);
-miSymbol symbolMaker::lightRainSun(10, true);
-miSymbol symbolMaker::lightRain(20, true);
-miSymbol symbolMaker::rain(30, true);
-miSymbol symbolMaker::sleetSun(100, true);
-miSymbol symbolMaker::snowSun(200, true);
-miSymbol symbolMaker::sleet(300, true);
-miSymbol symbolMaker::snow(400, true);
-miSymbol symbolMaker::lightRainThunderSun(1000, true);
+miSymbol symbolMaker::Sun(1, false);
+miSymbol symbolMaker::LightCloud(2, false);
+miSymbol symbolMaker::PartlyCloud(3, false);
+miSymbol symbolMaker::Cloud(4, false);
+miSymbol symbolMaker::Fog(5, true);
+miSymbol symbolMaker::LightRainSun(10, true);
+miSymbol symbolMaker::LightRain(20, true);
+miSymbol symbolMaker::Rain(30, true);
+miSymbol symbolMaker::SleetSun(100, true);
+miSymbol symbolMaker::SnowSun(200, true);
+miSymbol symbolMaker::Sleet(300, true);
+miSymbol symbolMaker::Snow(400, true);
+miSymbol symbolMaker::LightRainThunderSun(1000, true);
 miSymbol symbolMaker::RainThunder(2000, true);
 miSymbol symbolMaker::SnowThunder(3000, true);
-miSymbol symbolMaker::errorSymbol(999, true);
+miSymbol symbolMaker::SleetSunThunder(4000, true);
+miSymbol symbolMaker::SnowSunThunder(5000, true);
+miSymbol symbolMaker::LightRainThunder( 6000, true );
+miSymbol symbolMaker::SleetThunder(7000, true);
+miSymbol symbolMaker::ErrorSymbol(999, true);
 
 static bool fogstatus = true;
+static bool thunderstatus = false;
 static bool visiblestatus = false;
 static bool picturestatus = false;
 static bool longterm = false;
@@ -105,6 +110,10 @@ void symbolMaker::readSymbols(miString SymbolFname)
     if (readMi.contains("FOGSTATUS"))
       if (readMi.contains("false"))
         fogstatus = false;
+
+    if (readMi.contains("THUNDERSTATUS"))
+       if (readMi.contains("true"))
+          thunderstatus = true;
 
     if (readMi.contains("VISIBILITY"))
       if (readMi.contains("true"))
@@ -161,43 +170,43 @@ void symbolMaker::readSymbols(miString SymbolFname)
       // compares and sorts the readed data into  the symbols
 
       if (className == "SUN")
-        sun.AddCodes(normal, darkness);
+        Sun.AddCodes(normal, darkness);
 
       if (className == "LIGHTCLOUD")
-        lightCloud.AddCodes(normal, darkness);
+        LightCloud.AddCodes(normal, darkness);
 
       if (className == "PARTLYCLOUD")
-        partlyCloud.AddCodes(normal, darkness);
+        PartlyCloud.AddCodes(normal, darkness);
 
       if (className == "CLOUD")
-        cloud.AddCodes(normal, darkness);
+        Cloud.AddCodes(normal, darkness);
 
       if (className == "FOG")
-        fog.AddCodes(normal, darkness);
+        Fog.AddCodes(normal, darkness);
 
       if (className == "LIGHTRAINSUN")
-        lightRainSun.AddCodes(normal, darkness);
+        LightRainSun.AddCodes(normal, darkness);
 
       if (className == "LIGHTRAIN")
-        lightRain.AddCodes(normal, darkness);
+        LightRain.AddCodes(normal, darkness);
 
       if (className == "RAIN")
-        rain.AddCodes(normal, darkness);
+        Rain.AddCodes(normal, darkness);
 
       if (className == "SLEETSUN")
-        sleetSun.AddCodes(normal, darkness);
+        SleetSun.AddCodes(normal, darkness);
 
       if (className == "SNOWSUN")
-        snowSun.AddCodes(normal, darkness);
+        SnowSun.AddCodes(normal, darkness);
 
       if (className == "SLEET")
-        sleet.AddCodes(normal, darkness);
+        Sleet.AddCodes(normal, darkness);
 
       if (className == "SNOW")
-        snow.AddCodes(normal, darkness);
+        Snow.AddCodes(normal, darkness);
 
       if (className == "LIGHTRAINTHUNDERSUN")
-        lightRainThunderSun.AddCodes(normal, darkness);
+        LightRainThunderSun.AddCodes(normal, darkness);
 
       if (className == "RAINTHUNDER")
         RainThunder.AddCodes(normal, darkness);
@@ -205,8 +214,20 @@ void symbolMaker::readSymbols(miString SymbolFname)
       if (className == "SNOWTHUNDER")
         SnowThunder.AddCodes(normal, darkness);
 
+      if (className == "SLEETSUNTHUNDER")
+         SleetSunThunder.AddCodes(normal, darkness);
+
+      if (className == "SNOWSUNTHUNDER")
+         SnowSunThunder.AddCodes(normal, darkness);
+
+      if (className == "LIGHTRAINTHUNDER")
+         LightRainThunder.AddCodes(normal, darkness);
+
+      if (className == "SLEETTHUNDER")
+         SleetThunder.AddCodes(normal, darkness);
+
       if (className == "ERROR")
-        errorSymbol.AddCodes(normal, darkness);
+        ErrorSymbol.AddCodes(normal, darkness);
 
     }
   }
@@ -406,35 +427,35 @@ bool symbolMaker::cloudMaker(miTime now)
   symbol = myerror;
 
   if (ctotal.value(now) != DUMMY)
-    symbol = sun;
+    symbol = Sun;
 
   if (clow.value(now) != DUMMY && cmiddle.value(now) != DUMMY && cheight.value(
       now) != DUMMY && csurf.value(now) != DUMMY)
-    symbol = sun;
+    symbol = Sun;
 
   if (symbol == myerror)
     return (false);
 
   if (ctotal.value(now) >= 13)
-    symbol = lightCloud;
+    symbol = LightCloud;
 
   if (ctotal.value(now) > 38)
-    symbol = partlyCloud;
+    symbol = PartlyCloud;
 
   if (ctotal.value(now) > 86)
-    symbol = cloud;
+    symbol = Cloud;
 
   if (csurf.value(now) > 15 || clow.value(now) > 15 || cmiddle.value(now) > 15
       || cheight.value(now) > 25)
-    symbol = lightCloud;
+    symbol = LightCloud;
 
   if (csurf.value(now) > 45 || clow.value(now) > 45 || cmiddle.value(now) > 45
       || cheight.value(now) > 55)
-    symbol = partlyCloud;
+    symbol = PartlyCloud;
 
   if (csurf.value(now) > 86 || clow.value(now) > 86 || cmiddle.value(now) > 86
       || cheight.value(now) > 91)
-    symbol = cloud;
+    symbol = Cloud;
 
   //  if(fogstatus && csurf.value(now) > 75 )
   //     symbol = fog;
@@ -468,21 +489,21 @@ bool symbolMaker::rainMaker(miTime now)
 
   if (rrNow > 0.2 || pRain > 0) {
 
-    if (symbol == sun || symbol == lightCloud)
-      symbol = lightRainSun;
+    if (symbol == Sun || symbol == LightCloud)
+      symbol = LightRainSun;
 
-    if (symbol == partlyCloud) {
+    if (symbol == PartlyCloud) {
       if (rrNow <= 0.6 || noRain >= pRain)
-        symbol = lightRainSun;
+        symbol = LightRainSun;
       else
-        symbol = lightRain;
+        symbol = LightRain;
     }
 
-    if (symbol == cloud && rrNow > 0.2)
-      symbol = lightRain;
+    if (symbol == Cloud && rrNow > 0.2)
+      symbol = LightRain;
 
-    if (symbol == lightRain && rrNow > 5)
-      symbol = rain;
+    if (symbol == LightRain && rrNow > 5)
+      symbol = Rain;
   }
 
   return (true);
@@ -502,24 +523,24 @@ bool symbolMaker::tempMaker(miTime now)
   temperature = t2m.value(now);
 
   if (temperature == DUMMY) {
-    if (symbol == lightRainSun || symbol == lightRain || symbol == rain) {
+    if (symbol == LightRainSun || symbol == LightRain || symbol == Rain) {
       symbol = myerror;
       return (false);
     }
   }
 
-  if (symbol == lightRainSun) {
+  if (symbol == LightRainSun) {
     if (temperature <= 0.5)
-      symbol = snowSun;
+      symbol = SnowSun;
     if (temperature > 0.5 && temperature < 1.5)
-      symbol = sleetSun;
+      symbol = SleetSun;
   }
 
-  if (symbol == lightRain || symbol == rain) {
+  if (symbol == LightRain || symbol == Rain) {
     if (temperature <= 0.5)
-      symbol = snow;
+      symbol = Snow;
     if (temperature > 0.5 && temperature < 1.5)
-      symbol = sleet;
+      symbol = Sleet;
   }
   return (true);
 }
@@ -529,10 +550,11 @@ bool symbolMaker::tempMaker(miTime now)
 
 
 vector<miSymbol> symbolMaker::computeWithoutStateOfAggregate(const vector<
-    paramet> &AllModelData, const vector<miTime> &termin, int min, int max)
+    paramet> &AllModelData, const vector<miTime> &termin, int min, int max,
+    bool useNewLightningMaker )
 {
   vector<miSymbol> tmpSymbols;
-  myerror = errorSymbol;
+  myerror = ErrorSymbol;
   initializeModel(AllModelData);
   periods(termin, min, max);
 
@@ -541,12 +563,22 @@ vector<miSymbol> symbolMaker::computeWithoutStateOfAggregate(const vector<
     if (symbol != myerror)
       rainMaker(termin[yet]);
 
+    if( thunderstatus && symbol != myerror ) {
+       if( useNewLightningMaker )
+          lightningMakerNew( symbol, lli.value( termin[yet] ) );
+       else
+          lightningMaker( symbol, lli.value( termin[yet] ) );
+    }
+
+    if( fogstatus && symbol != myerror )
+       fogMaker( symbol, fogi.value( termin[yet] ) );
+
     symbol.setTime(termin[yet]);
     symbol.setLightStat(termin[yet], latitude);
     tmpSymbols.push_back(symbol);
   }
 
-  return (tmpSymbols);
+  return tmpSymbols;
 
 }
 ;
@@ -555,7 +587,7 @@ vector<miSymbol> symbolMaker::compute(vector<paramet> AllModelData, vector<
     miTime> termin, int min, int max)
 {
   vector<miSymbol> tmpSymbols;
-  myerror = errorSymbol;
+  myerror = ErrorSymbol;
   initializeModel(AllModelData);
   periods(termin, min, max);
   for (int yet = 0; yet < termin.size(); yet++) {
@@ -581,68 +613,68 @@ miSymbol symbolMaker::getSymbol(int Cnumber)
 
   for (int testlight = 1; testlight >= 0; testlight--) {
 
-    if (Cnumber == sun.customNumber(testlight)) {
-      tmp = sun;
+    if (Cnumber == Sun.customNumber(testlight)) {
+      tmp = Sun;
       tmp.setLightStat(testlight);
       return tmp;
     }
-    if (Cnumber == lightCloud.customNumber(testlight)) {
-      tmp = lightCloud;
+    if (Cnumber == LightCloud.customNumber(testlight)) {
+      tmp = LightCloud;
       tmp.setLightStat(testlight);
       return tmp;
     }
-    if (Cnumber == partlyCloud.customNumber(testlight)) {
-      tmp = partlyCloud;
+    if (Cnumber == PartlyCloud.customNumber(testlight)) {
+      tmp = PartlyCloud;
       tmp.setLightStat(testlight);
       return tmp;
     }
-    if (Cnumber == cloud.customNumber(testlight)) {
-      tmp = cloud;
+    if (Cnumber == Cloud.customNumber(testlight)) {
+      tmp = Cloud;
       tmp.setLightStat(testlight);
       return tmp;
     }
-    if (Cnumber == fog.customNumber(testlight)) {
-      tmp = fog;
+    if (Cnumber == Fog.customNumber(testlight)) {
+      tmp = Fog;
       tmp.setLightStat(testlight);
       return tmp;
     }
-    if (Cnumber == lightRainSun.customNumber(testlight)) {
-      tmp = lightRainSun;
+    if (Cnumber == LightRainSun.customNumber(testlight)) {
+      tmp = LightRainSun;
       tmp.setLightStat(testlight);
       return tmp;
     }
-    if (Cnumber == lightRain.customNumber(testlight)) {
-      tmp = lightRain;
+    if (Cnumber == LightRain.customNumber(testlight)) {
+      tmp = LightRain;
       tmp.setLightStat(testlight);
       return tmp;
     }
-    if (Cnumber == rain.customNumber(testlight)) {
-      tmp = rain;
+    if (Cnumber == Rain.customNumber(testlight)) {
+      tmp = Rain;
       tmp.setLightStat(testlight);
       return tmp;
     }
-    if (Cnumber == sleetSun.customNumber(testlight)) {
-      tmp = sleetSun;
+    if (Cnumber == SleetSun.customNumber(testlight)) {
+      tmp = SleetSun;
       tmp.setLightStat(testlight);
       return tmp;
     }
-    if (Cnumber == snowSun.customNumber(testlight)) {
-      tmp = snowSun;
+    if (Cnumber == SnowSun.customNumber(testlight)) {
+      tmp = SnowSun;
       tmp.setLightStat(testlight);
       return tmp;
     }
-    if (Cnumber == sleet.customNumber(testlight)) {
-      tmp = sleet;
+    if (Cnumber == Sleet.customNumber(testlight)) {
+      tmp = Sleet;
       tmp.setLightStat(testlight);
       return tmp;
     }
-    if (Cnumber == snow.customNumber(testlight)) {
-      tmp = snow;
+    if (Cnumber == Snow.customNumber(testlight)) {
+      tmp = Snow;
       tmp.setLightStat(testlight);
       return tmp;
     }
-    if (Cnumber == lightRainThunderSun.customNumber(testlight)) {
-      tmp = lightRainThunderSun;
+    if (Cnumber == LightRainThunderSun.customNumber(testlight)) {
+      tmp = LightRainThunderSun;
       tmp.setLightStat(testlight);
       return tmp;
     }
@@ -655,6 +687,30 @@ miSymbol symbolMaker::getSymbol(int Cnumber)
       tmp = SnowThunder;
       tmp.setLightStat(testlight);
       return tmp;
+    }
+
+    if (Cnumber == SleetSunThunder.customNumber(testlight)) {
+       tmp = SleetSunThunder;
+       tmp.setLightStat(testlight);
+       return tmp;
+    }
+
+    if (Cnumber == SnowSunThunder.customNumber(testlight)) {
+       tmp = SnowSunThunder;
+       tmp.setLightStat(testlight);
+       return tmp;
+    }
+
+    if (Cnumber == LightRainThunder.customNumber(testlight)) {
+       tmp = LightRainThunder;
+       tmp.setLightStat(testlight);
+       return tmp;
+    }
+
+    if (Cnumber == SleetThunder.customNumber(testlight)) {
+       tmp = SleetThunder;
+       tmp.setLightStat(testlight);
+       return tmp;
     }
   }
 
@@ -689,8 +745,8 @@ bool symbolMaker::isDry(int custom)
 
   tmpSym = getSymbol(custom);
 
-  if (tmpSym == sun || tmpSym == lightCloud || tmpSym == partlyCloud || tmpSym
-      == cloud)
+  if (tmpSym == Sun || tmpSym == LightCloud || tmpSym == PartlyCloud || tmpSym
+      == Cloud)
     return true;
 
   return false;
@@ -704,8 +760,10 @@ bool symbolMaker::isPrecip(int custom)
 
   tmpSym = getSymbol(custom);
 
-  if (tmpSym == rain || tmpSym == sleet || tmpSym == lightRain || tmpSym
-      == snow || tmpSym == RainThunder || tmpSym == SnowThunder)
+  if (tmpSym == Rain || tmpSym == Sleet || tmpSym == LightRain ||
+      tmpSym == Snow || tmpSym == RainThunder || tmpSym == SnowThunder ||
+      tmpSym == SleetSunThunder || tmpSym == SnowSunThunder ||
+      tmpSym == LightRainThunder || tmpSym == SleetThunder )
     return true;
 
   return false;
@@ -719,8 +777,8 @@ bool symbolMaker::isShower(int custom)
 
   tmpSym = getSymbol(custom);
 
-  if (tmpSym == lightRainSun || tmpSym == snowSun || tmpSym == sleetSun
-      || tmpSym == lightRainThunderSun)
+  if (tmpSym == LightRainSun || tmpSym == SnowSun || tmpSym == SleetSun
+      || tmpSym == LightRainThunderSun)
     return true;
 
   return false;
@@ -734,50 +792,57 @@ void symbolMaker::make_pos_symbols(map<int, int>& index,
   index.clear();
   image.clear();
 
-  index[errorSymbol.customNumber(true)] = 0;
-  index[sun.customNumber(true)] = 1;
-  index[lightCloud.customNumber(true)] = 2;
-  index[partlyCloud.customNumber(true)] = 3;
-  index[cloud.customNumber(true)] = 4;
-  index[lightRainSun.customNumber(true)] = 5;
-  index[lightRainThunderSun.customNumber(true)] = 6;
-  index[sleetSun.customNumber(true)] = 7;
-  index[snowSun.customNumber(true)] = 8;
-  index[lightRain.customNumber(true)] = 9;
-  index[rain.customNumber(true)] = 10;
+  index[ErrorSymbol.customNumber(true)] = 0;
+  index[Sun.customNumber(true)] = 1;
+  index[LightCloud.customNumber(true)] = 2;
+  index[PartlyCloud.customNumber(true)] = 3;
+  index[Cloud.customNumber(true)] = 4;
+  index[LightRainSun.customNumber(true)] = 5;
+  index[LightRainThunderSun.customNumber(true)] = 6;
+  index[SleetSun.customNumber(true)] = 7;
+  index[SnowSun.customNumber(true)] = 8;
+  index[LightRain.customNumber(true)] = 9;
+  index[Rain.customNumber(true)] = 10;
   index[RainThunder.customNumber(true)] = 11;
-  index[sleet.customNumber(true)] = 12;
-  index[snow.customNumber(true)] = 13;
+  index[Sleet.customNumber(true)] = 12;
+  index[Snow.customNumber(true)] = 13;
   index[SnowThunder.customNumber(true)] = 14;
-  index[fog.customNumber(true)] = 15;
+  index[Fog.customNumber(true)] = 15;
+  index[SleetSunThunder.customNumber(true)] = 20;
+  index[SnowSunThunder.customNumber(true)] = 21;
+  index[LightRainThunder.customNumber(true)] = 22;
+  index[SleetThunder.customNumber(true)] = 23;
 
-  index[sun.customNumber(false)] = 16;
-  index[partlyCloud.customNumber(false)] = 17;
-  index[lightRainSun.customNumber(false)] = 18;
-  index[snowSun.customNumber(false)] = 19;
+  index[Sun.customNumber(false)] = 16;
+  index[PartlyCloud.customNumber(false)] = 17;
+  index[LightRainSun.customNumber(false)] = 18;
+  index[SnowSun.customNumber(false)] = 19;
 
-  image[0] = errorSymbol.picture(true);
-  image[1] = sun.picture(true);
-  image[2] = lightCloud.picture(true);
-  image[3] = partlyCloud.picture(true);
-  image[4] = cloud.picture(true);
-  image[5] = lightRainSun.picture(true);
-  image[6] = lightRainThunderSun.picture(true);
-  image[7] = sleetSun.picture(true);
-  image[8] = snowSun.picture(true);
-  image[9] = lightRain.picture(true);
-  image[10] = rain.picture(true);
+  image[0] = ErrorSymbol.picture(true);
+  image[1] = Sun.picture(true);
+  image[2] = LightCloud.picture(true);
+  image[3] = PartlyCloud.picture(true);
+  image[4] = Cloud.picture(true);
+  image[5] = LightRainSun.picture(true);
+  image[6] = LightRainThunderSun.picture(true);
+  image[7] = SleetSun.picture(true);
+  image[8] = SnowSun.picture(true);
+  image[9] = LightRain.picture(true);
+  image[10] = Rain.picture(true);
   image[11] = RainThunder.picture(true);
-  image[12] = sleet.picture(true);
-  image[13] = snow.picture(true);
+  image[12] = Sleet.picture(true);
+  image[13] = Snow.picture(true);
   image[14] = SnowThunder.picture(true);
-  image[15] = fog.picture(true);
+  image[15] = Fog.picture(true);
 
-  image[16] = sun.picture(false);
-  image[17] = partlyCloud.picture(false);
-  image[18] = lightRainSun.picture(false);
-  image[19] = snowSun.picture(false);
-
+  image[16] = Sun.picture(false);
+  image[17] = PartlyCloud.picture(false);
+  image[18] = LightRainSun.picture(false);
+  image[19] = SnowSun.picture(false);
+  image[20] = SleetSunThunder.picture(true);
+  image[21] = SnowSunThunder.picture(true);
+  image[22] = LightRainThunder.picture(true);
+  image[23] = SleetThunder.picture(true);
 }
 ;
 
@@ -785,7 +850,7 @@ vector<miSymbol> symbolMaker::compute_new(vector<paramet> AllModelData, vector<
     miTime> termin, int min = 3, int max = 6, bool compute_minmax)
 {
   vector<miSymbol> tmpSymbols;
-  myerror = errorSymbol;
+  myerror = ErrorSymbol;
   initializeModel(AllModelData);
   periods(termin, min, max, compute_minmax);
   for (int yet = 0; yet < termin.size(); yet++) {
@@ -809,7 +874,7 @@ vector<miSymbol> symbolMaker::compute_new(vector<paramet> AllModelData, vector<
 
 bool symbolMaker::stateMaker(miTime now)
 {
-  return stateMaker(symbol, FLT_MAX, agr.value(now), FLT_MAX, FLT_MAX );
+  return stateMaker(symbol, FLT_MAX, agr.value(now) );
 }
 ;
 
@@ -828,13 +893,13 @@ int symbolMaker::stateOfAggregateFromTemperature(float temperature)
 }
 
 bool symbolMaker::stateMaker(miSymbol &symbol_, float temperature,
-    float stateOfAggregate, float lightningIndex, float fogIndex)
+    float stateOfAggregate )
 {
 
   int state;
   miSymbol oldSymbol = symbol_; //Save time and lightstate
 
-  miSymbol myErrorSymbol(errorSymbol);
+  miSymbol myErrorSymbol(ErrorSymbol);
   myErrorSymbol.AddErr("DATA ERROR > NO STATE OR TEMPERATURE DATA");
 
   if (stateOfAggregate == FLT_MAX || stateOfAggregate <= DUMMY)
@@ -846,60 +911,82 @@ bool symbolMaker::stateMaker(miSymbol &symbol_, float temperature,
 
 
   if (state < 0 || state > 2) {
-    if (symbol_ == lightRainSun || symbol_ == lightRain || symbol_ == rain) {
+    if (symbol_ == LightRainSun || symbol_ == LightRain || symbol_ == Rain) {
       symbol_ = myErrorSymbol;
       return false;
     }
   }
 
-  if (symbol_ == lightRainSun) {
+  if( symbol_ == LightRainSun ) {
     if (state == 0)
-      symbol_ = snowSun;
+      symbol_ = SnowSun;
     if (state == 1)
-      symbol_ = sleetSun;
-  }
-
-  if (symbol_ == lightRain || symbol_ == rain) {
+      symbol_ = SleetSun;
+  } else if( symbol_ == LightRain || symbol_ == Rain ) {
     if (state == 0)
-      symbol_ = snow;
+      symbol_ = Snow;
     if (state == 1)
-      symbol_ = sleet;
-  }
-
-  if (symbol_ == snow) {
+      symbol_ = Sleet;
+  } else if( symbol_ == Snow ) {
     if (state == 1)
-      symbol_ = sleet;
+      symbol_ = Sleet;
     if (state == 2)
-      symbol_ = rain;
-  }
-
-  if (symbol_ == snowSun) {
+      symbol_ = Rain;
+  } else if( symbol_ == SnowSun ) {
     if (state == 1)
-      symbol_ = sleetSun;
+      symbol_ = SleetSun;
     if (state == 2)
-      symbol_ = lightRainSun;
-  }
-
-  if (symbol_ == sleet) {
+      symbol_ = LightRainSun;
+  } else if( symbol_ == Sleet ) {
     if (state == 0)
-      symbol_ = snow;
+      symbol_ = Snow;
     if (state == 2)
-      symbol_ = rain;
-  }
-
-  if (symbol_ == sleetSun) {
+      symbol_ = Rain;
+  } else if( symbol_ == SleetSun ) {
     if (state == 0)
-      symbol_ = snowSun;
+      symbol_ = SnowSun;
     if (state == 2)
-      symbol_ = lightRainSun;
+      symbol_ = LightRainSun;
+  } else if( symbol_ == LightRainThunderSun) {
+     if( state == 0 )
+        symbol_ = SnowSunThunder;
+     else if( state == 1 )
+        symbol_ = SleetSunThunder;
+  } else if( symbol_ == RainThunder ) {
+     if( state == 0 )
+        symbol_ = SnowThunder;
+     else if( state == 1 )
+        symbol_ = SleetThunder;
+  } else if( symbol_ == LightRainThunder ) {
+     if( state == 0 )
+        symbol_ = SnowThunder;
+     else if( state == 1 )
+        symbol_ = SleetThunder;
+  } else if( symbol_ == SleetThunder ) {
+     if( state == 0 )
+        symbol_ = SnowThunder;
+     else if( state == 2 )
+        symbol_ = RainThunder;
+  } else if( symbol_ == SleetSunThunder ) {
+     if( state == 0 )
+        symbol_ = SnowSunThunder;
+     else if( state == 2 )
+        symbol_ = LightRainThunderSun;
+  } else if( symbol_ == SnowThunder ) {
+     if( state = 1 )
+        symbol_ = SleetThunder;
+     else if( state == 2 )
+        symbol_ = RainThunder;
+  } else if( symbol_ == SnowSunThunder ) {
+     if( state = 1 )
+        symbol_ = SleetSunThunder;
+     else if( state == 2 )
+        symbol_ = LightRainThunderSun;
   }
-
-  lightningMaker(symbol_, lightningIndex);
-  fogMaker(symbol_, fogIndex);
 
   //Restore time and lightstate
-  symbol_.setTime(oldSymbol.getTime());
-  symbol_.setLightStat(oldSymbol.getLightStat());
+  symbol_.setTime( oldSymbol.getTime() );
+  symbol_.setLightStat( oldSymbol.getLightStat() );
 
   return true;
 }
@@ -911,7 +998,6 @@ bool symbolMaker::lightningMaker(miTime now)
   lightningMaker(symbol, lli.value(now));
   return true;
 }
-;
 
 void symbolMaker::lightningMaker(miSymbol &symbol_, float lightningIndex)
 {
@@ -923,16 +1009,43 @@ void symbolMaker::lightningMaker(miSymbol &symbol_, float lightningIndex)
   if (lightning != 1)
     return;
 
-  if (symbol_ == lightRainSun || symbol_ == lightRain || symbol_ == sleetSun)
-    symbol_ = lightRainThunderSun;
-
-  if (symbol_ == rain)
+  if( symbol_ == LightRainSun || symbol_ == LightRain || symbol_ == SleetSun )
+    symbol_ = LightRainThunderSun;
+  else if( symbol_ == Rain )
     symbol_ = RainThunder;
-
-  if (symbol_ == snow || symbol_ == snowSun || symbol_ == sleet)
+  else if( symbol_ == Snow || symbol_ == SnowSun || symbol_ == Sleet )
     symbol_ = SnowThunder;
 }
-;
+
+
+void
+symbolMaker::
+lightningMakerNew( miSymbol &symbol_,
+                   float lightningIndex )
+{
+   if (lightningIndex == FLT_MAX || lightningIndex <= DUMMY)
+     return;
+
+   int lightning = int(lightningIndex);
+
+   if (lightning != 1)
+     return;
+
+   if ( symbol_ == LightRainSun )
+     symbol_ = LightRainThunderSun;
+   else if( symbol_ == LightRain )
+      symbol_ = LightRainThunder;
+   else if( symbol_ == SleetSun )
+      symbol_ = SleetSunThunder;
+   else if(symbol_ == Rain )
+     symbol_ = RainThunder;
+   else if( symbol_ == Snow )
+     symbol_ = SnowThunder;
+   else if( symbol_ == SnowSun )
+      symbol_ = SnowSunThunder;
+   else if( symbol_ == Sleet )
+      symbol_ = SleetThunder;
+}
 
 void symbolMaker::fogMaker(miSymbol &symbol_, float fogIndex)
 {
@@ -944,7 +1057,7 @@ void symbolMaker::fogMaker(miSymbol &symbol_, float fogIndex)
   if (foi == 0)
     return;
 
-  symbol_ = fog;
+  symbol_ = Fog;
 }
 ;
 

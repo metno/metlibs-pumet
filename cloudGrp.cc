@@ -51,33 +51,33 @@ int cloudGrp::findCl(miSymbol symb,const int& addW){
  if (addW == 1)
      return 10;
 
-  if(symb == symbolMaker::fog)
+  if(symb == symbolMaker::Fog)
     return 9;
 
-  if(symb == symbolMaker::sleet       ||
-     symb == symbolMaker::rain        ||
-     symb == symbolMaker::lightRain)
+  if(symb == symbolMaker::Sleet       ||
+     symb == symbolMaker::Rain        ||
+     symb == symbolMaker::LightRain)
     return 8;    
  
-  if(symb == symbolMaker::sleetSun    ||
-     symb == symbolMaker::snowSun     )
+  if(symb == symbolMaker::SleetSun    ||
+     symb == symbolMaker::SnowSun     )
     return 7;
  
-  if(symb == symbolMaker::snow        ||
+  if(symb == symbolMaker::Snow        ||
      symb == symbolMaker::RainThunder ||
      symb == symbolMaker::SnowThunder )
     return 6;
 
-  if(symb == symbolMaker::lightRainSun||
-     symb == symbolMaker::lightRainThunderSun)
+  if(symb == symbolMaker::LightRainSun||
+     symb == symbolMaker::LightRainThunderSun)
     return 5;
 
-  if(symb == symbolMaker::cloud       )
+  if(symb == symbolMaker::Cloud       )
     return 3;
-  if(symb == symbolMaker::lightCloud  ||
-     symb == symbolMaker::partlyCloud )
+  if(symb == symbolMaker::LightCloud  ||
+     symb == symbolMaker::PartlyCloud )
     return 2;
-  if(symb == symbolMaker::sun  ) 
+  if(symb == symbolMaker::Sun  ) 
     return 1;
   return 0;
 };
