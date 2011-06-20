@@ -252,7 +252,7 @@ bool symbolMaker::initializeModel(vector<paramet> AllData)
   lli.erase();
   fogi.erase();
 
-  for (int i = 0; i < AllData.size(); i++) {
+  for ( vector<paramet>::size_type i = 0; i < AllData.size(); i++) {
 
     if (AllData[i].paraNO == t2m.paraNO)
       t2m = AllData[i];
@@ -325,7 +325,7 @@ void symbolMaker::periods(vector<miTime> termin, int min = 3, int max = 6,
   cheight.erase();
   ctotal.erase();
 
-  for (int i = 0; i < termin.size(); i++) {
+  for (vector<miTime>::size_type i = 0; i < termin.size(); i++) {
     nrr0 = 0;
     nrr1 = 0;
     rrto = DUMMY;
@@ -508,7 +508,7 @@ bool symbolMaker::rainMaker(miTime now)
 
   return (true);
 }
-;
+
 
 // checks out the weather relevant temperatures (checks for snow etc.)
 // only relevant if precipitation occurs > 3rd step
@@ -544,7 +544,7 @@ bool symbolMaker::tempMaker(miTime now)
   }
   return (true);
 }
-;
+
 
 // main program
 
@@ -558,7 +558,7 @@ vector<miSymbol> symbolMaker::computeWithoutStateOfAggregate(const vector<
   initializeModel(AllModelData);
   periods(termin, min, max);
 
-  for (int yet = 0; yet < termin.size(); yet++) {
+  for (vector<miTime>::size_type yet = 0; yet < termin.size(); yet++) {
     cloudMaker(termin[yet]);
     if (symbol != myerror)
       rainMaker(termin[yet]);
@@ -590,7 +590,7 @@ vector<miSymbol> symbolMaker::compute(vector<paramet> AllModelData, vector<
   myerror = ErrorSymbol;
   initializeModel(AllModelData);
   periods(termin, min, max);
-  for (int yet = 0; yet < termin.size(); yet++) {
+  for (vector<miTime>::size_type yet = 0; yet < termin.size(); yet++) {
     cloudMaker(termin[yet]);
     if (symbol != myerror)
       rainMaker(termin[yet]);
@@ -853,7 +853,7 @@ vector<miSymbol> symbolMaker::compute_new(vector<paramet> AllModelData, vector<
   myerror = ErrorSymbol;
   initializeModel(AllModelData);
   periods(termin, min, max, compute_minmax);
-  for (int yet = 0; yet < termin.size(); yet++) {
+  for (vector<miTime>::size_type yet = 0; yet < termin.size(); yet++) {
     cloudMaker(termin[yet]);
     if (symbol != myerror)
       rainMaker(termin[yet]);
@@ -973,12 +973,12 @@ bool symbolMaker::stateMaker(miSymbol &symbol_, float temperature,
      else if( state == 2 )
         symbol_ = LightRainThunderSun;
   } else if( symbol_ == SnowThunder ) {
-     if( state = 1 )
+     if( state == 1 )
         symbol_ = SleetThunder;
      else if( state == 2 )
         symbol_ = RainThunder;
   } else if( symbol_ == SnowSunThunder ) {
-     if( state = 1 )
+     if( state == 1 )
         symbol_ = SleetSunThunder;
      else if( state == 2 )
         symbol_ = LightRainThunderSun;
@@ -1046,6 +1046,44 @@ lightningMakerNew( miSymbol &symbol_,
    else if( symbol_ == Sleet )
       symbol_ = SleetThunder;
 }
+
+bool
+symbolMaker::
+hasThunder( const miSymbol &symbol_ )
+{
+
+   if ( symbol_ == LightRainThunderSun ||
+        symbol_ == LightRainThunder ||
+        symbol_ == SleetSunThunder ||
+        symbol_ == RainThunder ||
+        symbol_ == SnowThunder ||
+        symbol_ == SnowSunThunder ||
+        symbol_ == SleetThunder )
+      return true;
+   else
+      return false;
+}
+
+void
+symbolMaker::
+turnOffThunder( miSymbol &symbol_ )
+{
+   if ( symbol_ == LightRainThunderSun )
+     symbol_ = LightRainSun;
+   else if( symbol_ == LightRainThunder )
+      symbol_ = LightRain;
+   else if( symbol_ ==  SleetSunThunder)
+      symbol_ = SleetSun;
+   else if(symbol_ == RainThunder )
+     symbol_ = Rain;
+   else if( symbol_ == SnowThunder )
+     symbol_ = Snow;
+   else if( symbol_ == SnowSunThunder )
+      symbol_ = SnowSun;
+   else if( symbol_ == SleetThunder )
+      symbol_ = Sleet;
+}
+
 
 void symbolMaker::fogMaker(miSymbol &symbol_, float fogIndex)
 {
