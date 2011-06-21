@@ -1031,6 +1031,8 @@ lightningMakerNew( miSymbol &symbol_,
    if (lightning != 1)
      return;
 
+   miSymbol oldSymbol = symbol_; //Save time and lightstate
+
    if ( symbol_ == LightRainSun )
      symbol_ = LightRainThunderSun;
    else if( symbol_ == LightRain )
@@ -1045,6 +1047,10 @@ lightningMakerNew( miSymbol &symbol_,
       symbol_ = SnowSunThunder;
    else if( symbol_ == Sleet )
       symbol_ = SleetThunder;
+
+   //Restore time and lightstate
+   symbol_.setTime( oldSymbol.getTime() );
+   symbol_.setLightStat( oldSymbol.getLightStat() );
 }
 
 bool
@@ -1068,6 +1074,8 @@ void
 symbolMaker::
 turnOffThunder( miSymbol &symbol_ )
 {
+   miSymbol oldSymbol = symbol_; //Save time and lightstate
+
    if ( symbol_ == LightRainThunderSun )
      symbol_ = LightRainSun;
    else if( symbol_ == LightRainThunder )
@@ -1082,6 +1090,10 @@ turnOffThunder( miSymbol &symbol_ )
       symbol_ = SnowSun;
    else if( symbol_ == SleetThunder )
       symbol_ = Sleet;
+
+   //Restore time and lightstate
+   symbol_.setTime( oldSymbol.getTime() );
+   symbol_.setLightStat( oldSymbol.getLightStat() );
 }
 
 
