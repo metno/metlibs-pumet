@@ -1096,6 +1096,39 @@ turnOffThunder( miSymbol &symbol_ )
    symbol_.setLightStat( oldSymbol.getLightStat() );
 }
 
+void
+symbolMaker::
+turnOnThunder( miSymbol &symbol_ )
+{
+   miSymbol oldSymbol = symbol_; //Save time and lightstate
+
+   if( symbol_ == Sun ||
+       symbol_ == LightRainSun ||
+       symbol_ == PartlyCloud )
+      symbol_ = LightRainThunderSun;
+   else if( symbol_ == Fog ||
+            symbol_ == LightCloud ||
+            symbol_ == Cloud ||
+            symbol_ == LightRain  )
+      symbol_ = LightRainThunder;
+   else if( symbol_ == Rain)
+      symbol_ = RainThunder;
+   else if( symbol_ == SleetSun )
+      symbol_ = SleetSunThunder;
+   else if( symbol_ == SnowSun )
+      symbol_ = SnowSunThunder;
+   else if( symbol_ == Sleet )
+      symbol_ = SleetThunder;
+   else if( symbol_ == Snow )
+      symbol_ = SnowThunder;
+   else
+      return;
+
+   //Restore time and lightstate
+   symbol_.setTime( oldSymbol.getTime() );
+   symbol_.setLightStat( oldSymbol.getLightStat() );
+}
+
 
 void symbolMaker::fogMaker(miSymbol &symbol_, float fogIndex)
 {

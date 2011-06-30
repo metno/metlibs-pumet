@@ -242,6 +242,7 @@ public:
                                  float lightningIndex );
   static bool hasThunder( const miSymbol &symbol_ );
   static void turnOffThunder( miSymbol &symbol_ );
+  static void turnOnThunder( miSymbol &symbol_ );
 
   bool lightningMaker(miutil::miTime);
 
