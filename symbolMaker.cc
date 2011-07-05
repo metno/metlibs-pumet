@@ -38,6 +38,12 @@ using namespace std;
 using namespace miutil;
 using namespace puMathAlgo;
 
+#define SLOG( logmsg ) { \
+   if( slog ) { \
+      *slog << logmsg; \
+   } \
+}
+
 // initializes the symbols with an
 // internal number and the WMO-code
 const float DUMMY = -999;
@@ -70,6 +76,7 @@ static bool thunderstatus = false;
 static bool visiblestatus = false;
 static bool picturestatus = false;
 static bool longterm = false;
+static bool useDynamicRainLimits=false;
 //float latitude = 60;
 
 
@@ -126,6 +133,11 @@ void symbolMaker::readSymbols(miString SymbolFname)
     if (readMi.contains("LONGTERM"))
       if (readMi.contains("true"))
         longterm = true;
+
+    if (readMi.contains("DYNAMIC_RAINLIMITS"))
+       if (readMi.contains("true"))
+          useDynamicRainLimits = true;
+
 
     if (readMi == "{") {
       getline(codeFile, className);
@@ -391,9 +403,9 @@ void symbolMaker::periods(vector<miTime> termin, int min = 3, int max = 6,
       }
 
       if (runTerm == termin[i] || runTerm == stopTerm) {
-        if (rrto > 0.6)
+        if (rrto > rainLimit /*0.6*/)
           nrr1++;
-        else if (rrto < 0.2 && rrto > DUMMY)
+        else if (rrto < noRainLimit /*0.2*/ && rrto > DUMMY)
           nrr0++;
         avRR.add(rrto);
         rrto = DUMMY;
@@ -407,6 +419,7 @@ void symbolMaker::periods(vector<miTime> termin, int min = 3, int max = 6,
 
       runTerm.addHour(1);
     }
+
     periodOfRain.push(termin[i], nrr1);
     periodOfNoRain.push(termin[i], nrr0);
     rrtotal.push(termin[i], avRR.middle());
@@ -487,26 +500,26 @@ bool symbolMaker::rainMaker(miTime now)
   // range 0.3 -> 0.6
 
 
-  if (rrNow > 0.2 || pRain > 0) {
+  if (rrNow > noRainLimit /*0.2*/ || pRain > 0) {
 
     if (symbol == Sun || symbol == LightCloud)
       symbol = LightRainSun;
 
     if (symbol == PartlyCloud) {
-      if (rrNow <= 0.6 || noRain >= pRain)
+      if (rrNow <= rainLimit /*0.6*/ || noRain >= pRain)
         symbol = LightRainSun;
       else
         symbol = LightRain;
     }
 
-    if (symbol == Cloud && rrNow > 0.2)
+    if (symbol == Cloud && rrNow > noRainLimit /*0.2*/)
       symbol = LightRain;
 
     if (symbol == LightRain && rrNow > 5)
       symbol = Rain;
   }
 
-  return (true);
+  return true;
 }
 
 
@@ -554,6 +567,18 @@ vector<miSymbol> symbolMaker::computeWithoutStateOfAggregate(const vector<
     bool useNewLightningMaker )
 {
   vector<miSymbol> tmpSymbols;
+
+  if( ! useDynamicRainLimits ) {
+     noRainLimit = 0.2;
+     rainLimit = 0.6;
+  } else {
+     int times=min+max-1;
+     noRainLimit = 0.2 + 0.05*(times<0?0:times);
+     rainLimit = noRainLimit + 0.4;
+     SLOG( "symbolMaker::compute: min: " << min << " max: " << max << " periods: " << (min+max-1)
+            << " noRainLimit: " << noRainLimit << " rainLimit: " << rainLimit );
+  }
+
   myerror = ErrorSymbol;
   initializeModel(AllModelData);
   periods(termin, min, max);
@@ -587,6 +612,18 @@ vector<miSymbol> symbolMaker::compute(vector<paramet> AllModelData, vector<
     miTime> termin, int min, int max)
 {
   vector<miSymbol> tmpSymbols;
+
+  if( ! useDynamicRainLimits ) {
+     noRainLimit = 0.2;
+     rainLimit = 0.6;
+  } else {
+     int times=min+max-1;
+     noRainLimit = 0.2 + 0.05*(times<0?0:times);
+     rainLimit = noRainLimit + 0.4; //diff: 0.6 - 0.2
+     SLOG( "symbolMaker::compute: min: " << min << " max: " << max << " periods: " << (min+max-1)
+           << " noRainLimit: " << noRainLimit << " rainLimit: " << rainLimit );
+  }
+
   myerror = ErrorSymbol;
   initializeModel(AllModelData);
   periods(termin, min, max);

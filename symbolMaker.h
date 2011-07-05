@@ -93,8 +93,9 @@ private:
   paramet fogi;     // fog-indicator (0 / 1)
   paramet periodOfRain;
   paramet periodOfNoRain;
-
-
+  float noRainLimit;
+  float rainLimit;
+  std::ostream *slog;
 
   static int MAXcustom;
   static int MINcustom;
@@ -141,8 +142,12 @@ public:
       lli(661),
       agr(170),
       fogi(665),
+      noRainLimit( 0.2 ),
+      rainLimit( 0.6 ),
+      slog( 0 ),
       myerror(ErrorSymbol) {}
 
+  void setLogger( std::ostream *olog ) { slog = olog; }
   bool initializeModel(std::vector<paramet>);
   static void readSymbols(miutil::miString);
   void periods(std::vector<miutil::miTime>,int,int,bool compute_minmax = false);
