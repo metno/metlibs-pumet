@@ -197,8 +197,8 @@ public:
    * The change is as follow, only symbols with precipitation is in the table.
    * Other symbols is not affected.
    *
-   * The state is either form the model or we can compute it from
-   * the temperature. Se the function stateOfAggregateFromTemperature( float temperature ).
+   * The state is either from the model or we can compute it from
+   * the temperature. @See stateOfAggregateFromTemperature( float temperature ).
    *
    * +---------------------+--------------------------------------------------------+
    * |                     |                       state                            |
@@ -271,6 +271,8 @@ public:
 
   static int maxCustom() { return MAXcustom;}
   static int minCustom() { return MINcustom;}
+  static void rainLimits( int hours, float &noRain, float &rain );
+
   void make_pos_symbols(std::map<int,int>&, std::map<int,miutil::miString>& );
 };
 

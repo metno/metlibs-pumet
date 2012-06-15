@@ -561,6 +561,20 @@ bool symbolMaker::tempMaker(miTime now)
 
 // main program
 
+void
+symbolMaker::
+rainLimits( int hours, float &noRain, float &rain )
+{
+   if( ! useDynamicRainLimits ) {
+        noRain = 0.2;
+        rain = 0.6;
+   } else {
+      --hours;
+      noRain = 0.2 + 0.05*(hours<0?0:hours);
+      rain = noRain + 0.4;
+   }
+
+}
 
 vector<miSymbol> symbolMaker::computeWithoutStateOfAggregate(const vector<
     paramet> &AllModelData, const vector<miTime> &termin, int min, int max,
