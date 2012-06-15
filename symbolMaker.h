@@ -99,6 +99,9 @@ private:
 
   static int MAXcustom;
   static int MINcustom;
+
+  miSymbol myerror;
+public:
   static miSymbol Sun;
   static miSymbol LightCloud;
   static miSymbol PartlyCloud;
@@ -120,8 +123,6 @@ private:
   static miSymbol SleetThunder;
   static miSymbol ErrorSymbol;
 
-  miSymbol myerror;
-public:
   symbolMaker()
     : latitude(60),
       t2m(31),
