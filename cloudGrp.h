@@ -37,7 +37,7 @@
 class cloudGrp : public weatherSpec {
 public:
   cloudGrp();
-  int findCl(miSymbol,const int& i=0 );
+  int findCl(symbolMaker::Symboltype sym ,const int& i=0 );
   bool signChange(int,int);
 };
 

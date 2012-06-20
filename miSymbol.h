@@ -98,6 +98,11 @@ public:
     light = l;
     dark = d;
   }
+
+  void setBase(const int i , const bool ch) { 
+    intNum=i;
+    changeSig=ch; 
+  }
   void AddErr(miutil::miString errMessage );
   void setLightStat(miutil::miTime,float);
   void setLightStat(bool);

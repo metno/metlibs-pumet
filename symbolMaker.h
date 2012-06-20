@@ -68,11 +68,19 @@
 
 class symbolMaker{
   friend class cloudGrp;
+
+public:
+  enum Symboltype {Sun ,LightCloud, PartlyCloud, Cloud, Fog, 
+		   LightRainSun, LightRain, Rain, SleetSun, 
+		   SnowSun, Sleet, Snow, LightRainThunderSun,
+		   RainThunder, SnowThunder, SleetSunThunder,
+		   SnowSunThunder, LightRainThunder,
+		   SleetThunder, ErrorSymbol};           
 private:
   //int MAXcustom, MINcustom;
   float latitude;
 
-  miSymbol symbol; //  rawdata ...
+  Symboltype symbol; //  rawdata ...
   paramet t2m ;    // temperature in 2 m
   paramet rrf ;    // frontal precip. RR6h, average (t-6h, t+6h)
   paramet rrk ;    // convect. precip.        - " -
@@ -99,30 +107,14 @@ private:
 
   static int MAXcustom;
   static int MINcustom;
+  void initializeSymbols();
+
+
+  int customNumber(Symboltype type, bool lights);
+  miutil::miString picture(Symboltype type, bool lights);
 
   miSymbol myerror;
 public:
-  static miSymbol Sun;
-  static miSymbol LightCloud;
-  static miSymbol PartlyCloud;
-  static miSymbol Cloud;
-  static miSymbol Fog;
-  static miSymbol LightRainSun;
-  static miSymbol LightRain;
-  static miSymbol Rain;
-  static miSymbol SleetSun;
-  static miSymbol SnowSun;
-  static miSymbol Sleet;
-  static miSymbol Snow;
-  static miSymbol LightRainThunderSun;
-  static miSymbol RainThunder;
-  static miSymbol SnowThunder;
-  static miSymbol SleetSunThunder;
-  static miSymbol SnowSunThunder;
-  static miSymbol LightRainThunder;
-  static miSymbol SleetThunder;
-  static miSymbol ErrorSymbol;
-
   symbolMaker()
     : latitude(60),
       t2m(31),
@@ -146,11 +138,11 @@ public:
       noRainLimit( 0.2 ),
       rainLimit( 0.6 ),
       slog( 0 ),
-      myerror(ErrorSymbol) {}
+      myerror(999,true) {}
 
   void setLogger( std::ostream *olog ) { slog = olog; }
   bool initializeModel(std::vector<paramet>);
-  static void readSymbols(miutil::miString);
+  void readSymbols(miutil::miString);
   void periods(std::vector<miutil::miTime>,int,int,bool compute_minmax = false);
 
   /**
@@ -173,13 +165,13 @@ public:
   std::vector<float>    water_state(std::vector<float>);
 
 
-  static miSymbol getErrorSymbol() { return ErrorSymbol; }
+  miSymbol getErrorSymbol();
 
   bool cloudMaker(miutil::miTime);
   bool rainMaker(miutil::miTime);
   bool tempMaker(miutil::miTime);
 
-
+  int visibility(enum symbolMaker::Symboltype type);
   /**
    * Create an state of aggregate from temperaure.
    * The teperature is in degree Celsius.
@@ -188,7 +180,7 @@ public:
    *  1 (sleet) 0.5 < temperature < 1.5.
    *  2 (rain)  temeperature >= 1.5
    */
-  static int stateOfAggregateFromTemperature( float temperature );
+   int stateOfAggregateFromTemperature( float temperature );
 
 
 
@@ -198,8 +190,8 @@ public:
    * The change is as follow, only symbols with precipitation is in the table.
    * Other symbols is not affected.
    *
-   * The state is either from the model or we can compute it from
-   * the temperature. @See stateOfAggregateFromTemperature( float temperature ).
+   * The state is either form the model or we can compute it from
+   * the temperature. Se the function stateOfAggregateFromTemperature( float temperature ).
    *
    * +---------------------+--------------------------------------------------------+
    * |                     |                       state                            |
@@ -225,11 +217,6 @@ public:
    *
    * If there is fog, it will override all other symbols and the symbol is set to FOG.
    */
-  static bool stateMaker( miSymbol &symbol_,
-	                       float temperature,
-		                    float stateOfAggregate = FLT_MAX  );
-
-
 
   bool stateMaker( miutil::miTime );
 
@@ -241,16 +228,13 @@ public:
    * treated undefined values.
    */
 
-  static void lightningMaker( miSymbol &symbol_,
-		                        float lightningIndex );
+  void lightningMaker( miutil::miTime now);
 
-  static void lightningMakerNew( miSymbol &symbol_,
-                                 float lightningIndex );
-  static bool hasThunder( const miSymbol &symbol_ );
-  static void turnOffThunder( miSymbol &symbol_ );
-  static void turnOnThunder( miSymbol &symbol_ );
+  void lightningMakerNew( miutil::miTime now);
+  bool hasThunder();
+  void turnOffThunder();
+  void turnOnThunder();
 
-  bool lightningMaker(miutil::miTime);
 
   /**
    * If there is fog set the symbol to fog. The fogIndex
@@ -259,21 +243,22 @@ public:
    * If fogIndex is FLT_MAX or FLT_MIN the function does nothing. It is
    * treated undefined values.
    */
-  static void fogMaker( miSymbol &symbol_, float fogIndex);
+  void fogMaker( float fogIndex);
 
-  bool fogMaker(miutil::miTime);
+  void fogMaker(miutil::miTime);
 
   bool signChange(int, int);
   miSymbol getSymbol(int );
+  miSymbol type2symbol(Symboltype);
+  Symboltype getSymboltype(int Cnumber, int testlight);
+  Symboltype getSymboltype(int Cnumber);
 
   bool isShower(int);
   bool isPrecip(int);
   bool isDry(int);
 
-  static int maxCustom() { return MAXcustom;}
-  static int minCustom() { return MINcustom;}
-  static void rainLimits( int hours, float &noRain, float &rain );
-
+  int maxCustom();
+  int minCustom();
   void make_pos_symbols(std::map<int,int>&, std::map<int,miutil::miString>& );
 };
 

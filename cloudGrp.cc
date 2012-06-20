@@ -46,7 +46,7 @@ cloudGrp::cloudGrp(){
   AddToList(  10, "8/0100-0300 @{ifFog}");
 };
   
-int cloudGrp::findCl(miSymbol symb,const int& addW){
+int cloudGrp::findCl(symbolMaker::Symboltype symb,const int& addW){
 
  if (addW == 1)
      return 10;
