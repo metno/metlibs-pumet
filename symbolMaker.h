@@ -107,7 +107,7 @@ private:
 
   static int MAXcustom;
   static int MINcustom;
-  void initializeSymbols();
+
 
 
   int customNumber(Symboltype type, bool lights);
@@ -142,8 +142,10 @@ public:
 
   void setLogger( std::ostream *olog ) { slog = olog; }
   bool initializeModel(std::vector<paramet>);
-  void readSymbols(miutil::miString);
+  static void readSymbols(miutil::miString);
   void periods(std::vector<miutil::miTime>,int,int,bool compute_minmax = false);
+
+  static void rainLimits( int hours, float &noRain, float &rain );
 
   /**
    * This function creates a symbol that is not adjusted with repect on

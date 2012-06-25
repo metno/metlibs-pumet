@@ -51,6 +51,7 @@ const float DUMMY = -999;
 int symbolMaker::MAXcustom = -1000;
 int symbolMaker::MINcustom = 1000;
 
+
 int symbolMaker::maxCustom() { return MAXcustom;}
 int symbolMaker::minCustom() { return MINcustom;}
 
@@ -65,30 +66,30 @@ bool useDynamicRainLimits=false;
 
 
 // initialise symbol generation at runtime to avoid linker trouble!
-void symbolMaker::initializeSymbols()
+void initializeSymbols()
 {
   vector<miSymbol> sbuffer(20);
 
-  sbuffer[Sun]          = miSymbol(1, false);
-  sbuffer[LightCloud]   = miSymbol(2, false);
-  sbuffer[PartlyCloud]  = miSymbol(3, false);
-  sbuffer[Cloud]        = miSymbol(4, false);
-  sbuffer[Fog]          = miSymbol(5, true);
-  sbuffer[LightRainSun] = miSymbol(10, true);
-  sbuffer[LightRain]    = miSymbol(20, true);
-  sbuffer[Rain]         = miSymbol(30, true);
-  sbuffer[SleetSun]     = miSymbol(100, true);
-  sbuffer[SnowSun]      = miSymbol(200, true);
-  sbuffer[Sleet]        = miSymbol(300, true);
-  sbuffer[Snow]         = miSymbol(400, true);
-  sbuffer[LightRainThunderSun] = miSymbol(1000, true);
-  sbuffer[RainThunder]      = miSymbol(2000, true);
-  sbuffer[SnowThunder]      = miSymbol(3000, true);
-  sbuffer[SleetSunThunder]  = miSymbol(4000, true);
-  sbuffer[SnowSunThunder]   = miSymbol(5000, true);
-  sbuffer[LightRainThunder] = miSymbol( 6000, true );
-  sbuffer[SleetThunder]     = miSymbol(7000, true);
-  sbuffer[ErrorSymbol]      = miSymbol(999, true);
+  sbuffer[symbolMaker::Sun]          = miSymbol(1, false);
+  sbuffer[symbolMaker::LightCloud]   = miSymbol(2, false);
+  sbuffer[symbolMaker::PartlyCloud]  = miSymbol(3, false);
+  sbuffer[symbolMaker::Cloud]        = miSymbol(4, false);
+  sbuffer[symbolMaker::Fog]          = miSymbol(5, true);
+  sbuffer[symbolMaker::LightRainSun] = miSymbol(10, true);
+  sbuffer[symbolMaker::LightRain]    = miSymbol(20, true);
+  sbuffer[symbolMaker::Rain]         = miSymbol(30, true);
+  sbuffer[symbolMaker::SleetSun]     = miSymbol(100, true);
+  sbuffer[symbolMaker::SnowSun]      = miSymbol(200, true);
+  sbuffer[symbolMaker::Sleet]        = miSymbol(300, true);
+  sbuffer[symbolMaker::Snow]         = miSymbol(400, true);
+  sbuffer[symbolMaker::LightRainThunderSun] = miSymbol(1000, true);
+  sbuffer[symbolMaker::RainThunder]      = miSymbol(2000, true);
+  sbuffer[symbolMaker::SnowThunder]      = miSymbol(3000, true);
+  sbuffer[symbolMaker::SleetSunThunder]  = miSymbol(4000, true);
+  sbuffer[symbolMaker::SnowSunThunder]   = miSymbol(5000, true);
+  sbuffer[symbolMaker::LightRainThunder] = miSymbol( 6000, true );
+  sbuffer[symbolMaker::SleetThunder]     = miSymbol(7000, true);
+  sbuffer[symbolMaker::ErrorSymbol]      = miSymbol(999, true);
 
   symbolbuffer=sbuffer;
 }
@@ -602,7 +603,19 @@ bool symbolMaker::tempMaker(miTime now)
 
 
 // main program
-
+void
+symbolMaker::
+rainLimits( int hours, float &noRain, float &rain )
+{
+   if( ! useDynamicRainLimits ) {
+      noRain = 0.2;
+      rain = 0.6;
+   } else {
+      --hours;
+      noRain = 0.2 + 0.05*(hours<0?0:hours);
+      rain = noRain + 0.4;
+   }
+}
 
 vector<miSymbol> symbolMaker::computeWithoutStateOfAggregate(const vector<
     paramet> &AllModelData, const vector<miTime> &termin, int min, int max,
