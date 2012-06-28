@@ -4,6 +4,8 @@ pkgname = puMet
 
 include $(top_srcdir)/metlibs.mk
 
+EXTRA_DIST += check-qbSymbols.def
+
 lib_LTLIBRARIES=libpuMet.la
 
 libpuMet_la_SOURCES = \
@@ -50,3 +52,18 @@ pkg_include_HEADERS = \
 	windProfile.h \
 	WindCalc.h
 
+check_PROGRAMS = \
+	check-symbolMaker
+
+check_symbolMaker_SOURCES = check-symbolMaker.cc
+check_symbolMaker_CPPFLAGS = \
+	-I$(top_srcdir) \
+	-DPUMETDIR="\""$(top_srcdir)/puMet"\"" 
+
+check_symbolMaker_LDFLAGS = $(CURL_LDFLAGS)
+check_symbolMaker_LDADD = \
+	libpuMet.la \
+	$(top_builddir)/puTools/libpuTools.la $(CURL_LIBS)
+
+
+TESTS = $(check_PROGRAMS)
