@@ -110,7 +110,7 @@ public:
   void setTime(miutil::miTime t){tim = t;};
 
   int vis();
-  int index(){return intNum;}
+  int index()const {return intNum;}
 
 
   int customNumber();
