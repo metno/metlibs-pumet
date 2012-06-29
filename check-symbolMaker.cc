@@ -187,6 +187,7 @@ class test_customNumber: public Common {
          return fail;
       }
 
+      symbol.setLightStat(true);
       if( symbol.customName() != "delvis skyet" ) {
          why = "FAILED: customName: PartlyCloud: got '" + symbol.customName()+"' expecting 'delvis skyet'";
          return fail;
