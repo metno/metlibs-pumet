@@ -41,7 +41,7 @@ using namespace miutil;
 // checks out the lightstatus ( false = darkness) and returns the
 // customer requested number
 
-int miSymbol::customNumber(bool lstat){
+int miSymbol::customNumber(bool lstat)const{
   if (lstat == false)
     return dark.extNum;
   return light.extNum;
@@ -62,7 +62,7 @@ miString miSymbol::picture(bool lstat){
 
 
 
-int miSymbol::customNumber(){
+int miSymbol::customNumber()const{
   if (lightstat == false)
     return dark.extNum;
   return light.extNum;
@@ -70,11 +70,21 @@ int miSymbol::customNumber(){
 
 
 // like customNumber, but for the Name
-miString miSymbol::customName(){
+miString miSymbol::customName()const{
   if (lightstat == false)
     return dark.name;
   return light.name;
 };
+
+
+miutil::miString
+miSymbol::customName( bool lightState_ )const
+{
+   if (lightState_ == false)
+     return dark.name;
+   return light.name;
+
+}
 
 
 // visibility

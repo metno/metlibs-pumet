@@ -113,10 +113,11 @@ public:
   int index()const {return intNum;}
 
 
-  int customNumber();
-  int customNumber(bool);
+  int customNumber()const;
+  int customNumber(bool lightState)const;
   bool change() const {return changeSig;};
-  miutil::miString customName();
+  miutil::miString customName()const;
+  miutil::miString customName( bool lightState )const;
   miutil::miTime getTime() const {return tim;};
   miutil::miString picture();
   miutil::miString picture(bool);
