@@ -66,6 +66,22 @@
 // initializes by construction the ident numbers of the
 // requested parameters, sorts the model input and does the job
 
+
+/**
+ *  SNOW:  temperature <= snowLimit
+ *  SLEET: snowLimit < temperature < sleetLimit.
+ *  RAIN:  temeperature >= sleetLimit;
+ */
+struct AggregateLimits
+{
+   float snowLimit;
+   float sleetLimit;
+   AggregateLimits()
+      : snowLimit( 0.5 ), sleetLimit( 1.5 ) {}
+   AggregateLimits( float snow, float sleet )
+      : snowLimit( snow ), sleetLimit( sleet ) {}
+};
+
 class symbolMaker{
   friend class cloudGrp;
 
@@ -185,6 +201,7 @@ public:
    *  2 (rain)  temeperature >= 1.5
    */
   static int stateOfAggregateFromTemperature( float temperature );
+  static int stateOfAggregateFromTemperature( float temperature, const AggregateLimits &limits );
 
 
 
@@ -227,6 +244,26 @@ public:
   static bool stateMaker( miSymbol &symbol_,
                           float temperature,
                           float stateOfAggregate = FLT_MAX  );
+
+  /**
+   *  Valid values for stateOfAggregate.
+   *  0 - snow.
+   *  1 - sleet.
+   *  2 - rain.
+   *
+   *  @return false when stateOfAggregate is an invalid value.
+   */
+  static bool stateMaker( symbolMaker::Symboltype &symbol_,
+                          int stateOfAggregate );
+
+
+  static bool stateMaker( symbolMaker::Symboltype &symbol_,
+                          float temperature,
+                          const AggregateLimits &limits );
+
+  static bool stateMaker( miSymbol &symbol_,
+                          float temperature,
+                          const AggregateLimits &limits );
 
 
 

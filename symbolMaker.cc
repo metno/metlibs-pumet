@@ -958,13 +958,20 @@ int
 symbolMaker::
 stateOfAggregateFromTemperature(float temperature)
 {
-   if (temperature == FLT_MAX || temperature <= DUMMY)
-      return INT_MAX;
+   return stateOfAggregateFromTemperature( temperature, AggregateLimits() );
+}
 
-   if (temperature <= 0.5)
+int
+symbolMaker::
+stateOfAggregateFromTemperature( float temperature, const AggregateLimits &limits )
+{
+   if (temperature == FLT_MAX || temperature <= DUMMY)
+         return INT_MAX;
+
+   if (temperature <= limits.snowLimit)
       return 0; //Snow
 
-   if (temperature > 0.5 && temperature < 1.5)
+   if (temperature > limits.snowLimit && temperature < limits.sleetLimit )
       return 1; //Sleet
 
    return 2; //rain
@@ -986,30 +993,17 @@ stateMaker( const miutil::miTime &termin )
 
 }
 
-
 bool
 symbolMaker::
 stateMaker( symbolMaker::Symboltype &symbol_,
-            float temperature,
-            float stateOfAggregate )
+            int state )
 {
-   int state;
-
-   if (stateOfAggregate == FLT_MAX || stateOfAggregate == FLT_MIN
-         || stateOfAggregate <= DUMMY)
-      state = stateOfAggregateFromTemperature(temperature);
-   else
-      state = int(stateOfAggregate);
 
    // state: 0=snow, 1=sleet, 2=rain
 
-
    if (state < 0 || state > 2) {
-      if (symbol_ == LightRainSun || symbol_ == LightRain || symbol_ == Rain) {
-         //myerror.AddErr("DATA ERROR > NO STATE OR TEMPERATURE DATA");
-         symbol_ = ErrorSymbol;
-         return false;
-      }
+      symbol_ = ErrorSymbol;
+      return false;
    }
 
    if( symbol_ == LightRainSun ) {
@@ -1081,6 +1075,57 @@ stateMaker( symbolMaker::Symboltype &symbol_,
 
    return true;
 }
+
+bool
+symbolMaker::
+stateMaker( symbolMaker::Symboltype &symbol_,
+            float temperature,
+            const AggregateLimits &limits )
+{
+   return stateMaker( symbol_, stateOfAggregateFromTemperature(temperature, limits ) );
+}
+
+bool
+symbolMaker::
+stateMaker( symbolMaker::Symboltype &symbol_,
+            float temperature,
+            float stateOfAggregate )
+{
+   int state;
+
+   if (stateOfAggregate == FLT_MAX || stateOfAggregate == FLT_MIN
+         || stateOfAggregate <= DUMMY)
+      state = stateOfAggregateFromTemperature(temperature, AggregateLimits() );
+   else
+      state = int(stateOfAggregate);
+
+   return stateMaker( symbol_, state );
+}
+
+bool
+symbolMaker::
+stateMaker( miSymbol &symbol__,
+            float temperature,
+            const AggregateLimits &limits )
+{
+   miSymbol oldSymbol = symbol__; //Save time and lightstate
+   Symboltype symbol_ = symbol2type( oldSymbol );
+
+   bool ret = stateMaker( symbol_, temperature, limits );
+
+   //Restore time and lightstate
+   symbol__ = createSymbol( symbol_ );
+   symbol__.setTime( oldSymbol.getTime() );
+   symbol__.setLightStat( oldSymbol.getLightStat() );
+
+   if( !ret ) {
+      symbol__.AddErr("DATA ERROR > NO STATE OR TEMPERATURE DATA");
+   }
+
+   return ret;
+
+}
+
 
 
 bool
