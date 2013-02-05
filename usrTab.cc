@@ -78,31 +78,28 @@ bool usrTab::create(miString infile){
 
 miTime usrTab::dates(miString index){
 
-  int year, month, day, hour;
   miTime tmpTime = miTime::nowTime();
-  vector<miString> tmpVec;
   miString tmpStr;
 
   tmpStr = entity[index];
 
 
   if(tmpStr.exists()){
-    tmpVec = tmpStr.split();
+    const std::vector<miString> tmpVec = tmpStr.split();
 
-    year  = atoi(tmpVec[0].cStr());
-
-    if(tmpVec.size() > 1)
-      month = atoi(tmpVec[1].cStr());
-
-    if(tmpVec.size() > 3 )
-      hour = atoi(tmpVec[3].cStr());
-    else
-      hour = 12;
-
-   if(tmpVec.size() > 2){
-      day   = atoi(tmpVec[2].cStr());
-      tmpTime.setTime(year, month, day, hour);
-   }
+    if (tmpVec.size() > 2) {
+        const int year = atoi(tmpVec[0].cStr());
+        const int month = atoi(tmpVec[1].cStr());
+        
+        int hour;
+        if (tmpVec.size() > 3)
+            hour = atoi(tmpVec[3].cStr());
+        else
+            hour = 12;
+        
+        const int day = atoi(tmpVec[2].cStr());
+        tmpTime.setTime(year, month, day, hour);
+    }
   }
 
   return tmpTime;

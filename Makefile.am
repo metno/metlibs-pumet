@@ -29,7 +29,7 @@ libpuMet_la_SOURCES = \
 libpuMet_la_CPPFLAGS = \
 	${PUTOOLS_CPPFLAGS}
 
-libpuMet_la_LDFLAGS = ${VERSION_INFO}
+libpuMet_la_LDFLAGS = ${puMet_VERSION_INFO}
 if ENABLE_SHARED_LIBRARY
 libpuMet_la_LDFLAGS += \
 	${PUTOOLS_LDFLAGS}
