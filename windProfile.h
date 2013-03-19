@@ -39,6 +39,7 @@
 #include <puTools/miString.h>
 
 #include <algorithm>
+#include <iostream>
 #include <vector>
 
 // stores the single point speed at height z and z itself
