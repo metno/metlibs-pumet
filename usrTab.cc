@@ -45,7 +45,7 @@ bool usrTab::create(miString infile){
   vector<miString> tmpVec;
 
 
-  inp.open(infile.cStr(),ios::in);
+  inp.open(infile.c_str(),ios::in);
   if(!infile.exists()){
     cerr<<"No setup file specified!"<<endl;
     return false;
@@ -88,16 +88,16 @@ miTime usrTab::dates(miString index){
     const std::vector<miString> tmpVec = tmpStr.split();
 
     if (tmpVec.size() > 2) {
-        const int year = atoi(tmpVec[0].cStr());
-        const int month = atoi(tmpVec[1].cStr());
+        const int year = atoi(tmpVec[0].c_str());
+        const int month = atoi(tmpVec[1].c_str());
         
         int hour;
         if (tmpVec.size() > 3)
-            hour = atoi(tmpVec[3].cStr());
+            hour = atoi(tmpVec[3].c_str());
         else
             hour = 12;
         
-        const int day = atoi(tmpVec[2].cStr());
+        const int day = atoi(tmpVec[2].c_str());
         tmpTime.setTime(year, month, day, hour);
     }
   }

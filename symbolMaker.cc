@@ -167,7 +167,7 @@ readSymbols(const miString &SymbolFname)
 
    // reading begins here
 
-   codeFile.open(SymbolFname.cStr(), ios::in);
+   codeFile.open(SymbolFname.c_str(), ios::in);
 
    if (!codeFile)
       cerr << "SymbolMaker error: File " << SymbolFname << " not found" << endl;
@@ -212,7 +212,7 @@ readSymbols(const miString &SymbolFname)
          getline(codeFile, normalName);
          words = normalName.split();
          normalName.replace(words[0], "");
-         normalIndex = atoi(words[0].cStr());
+         normalIndex = atoi(words[0].c_str());
          normalName.trim();
          if (picturestatus) {
             getline(codeFile, normalPic);
@@ -222,7 +222,7 @@ readSymbols(const miString &SymbolFname)
          darkName.trim();
          words = darkName.split();
          darkName.replace(words[0], "");
-         darkIndex = atoi(words[0].cStr());
+         darkIndex = atoi(words[0].c_str());
          darkName.trim();
          if (picturestatus) {
             getline(codeFile, darkPic);

@@ -103,7 +103,7 @@ bool tafGF::readIn(miString fname){
 
 
 
-  gfFile.open(fname.cStr(),ios::in);
+  gfFile.open(fname.c_str(),ios::in);
   if(!gfFile)
     return(false);
 

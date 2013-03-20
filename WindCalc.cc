@@ -16,7 +16,7 @@ bool WindCalc::readFactors(const miString& filename){
   wind_factors.clear();
   gust_factors.clear();
 
-  ifstream f(filename.cStr());
+  ifstream f(filename.c_str());
   if (!f) {
     cerr << "ERROR opening file:" << filename << endl;
     return false;

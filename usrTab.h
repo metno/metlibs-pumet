@@ -67,10 +67,10 @@ public:
   { entity[m]= requ;}
 
   int numInt(miutil::miString m)
-    { return atoi(entity[m].cStr());}
+    { return atoi(entity[m].c_str());}
 
   float numFloat( miutil::miString m)
-    { return atof(entity[m].cStr());}
+    { return atof(entity[m].c_str());}
 
   miutil::miString operator[] ( const miutil::miString &m )
   { return ( bool(entity.count(m)) ? entity[m] : mNull); }
