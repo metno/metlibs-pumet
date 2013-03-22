@@ -31,212 +31,110 @@
 #include "config.h"
 #endif
 
+#include "symbolMaker.h"
+
+#include <gtest/gtest.h>
+
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
+
 #include <vector>
 #include <map>
 #include <set>
 #include <string>
 #include <fstream>
-#include <boost/format.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string.hpp>
-#include <check/tap>
-#include "symbolMaker.h"
 
 using namespace miutil;
-using namespace tap;
 using namespace std;
 
-string pumetdir( PUMETDIR );
-
-bool
-readData( const string &filename,
-          vector<paramet> &modelData,
-          vector<miTime> &termins,
-          float latitude=10 /*dummy latitude*/)
+static void readData(const std::string &filename,
+                     std::vector<paramet> &modelData, std::vector<miTime> &termins,
+                     float latitude=10 /*dummy latitude*/)
 {
-   set<miTime> times;
-   map< int, map<miutil::miTime,float> > allParameters;
-   string buf;
-   vector<string> vals;
-   ifstream fin( filename.c_str() );
-   int par;
-   miTime termin;
-   float val;
+    std::set<miTime> times;
+    std::map< int, std::map<miutil::miTime,float> > allParameters;
+    std::string buf;
+    std::vector<std::string> vals;
+    int par;
+    miTime termin;
+    float val;
 
-   modelData.clear();
-   termins.clear();
-
-   if( ! fin ) {
-      cerr << "failed to open file <" << filename << ">." << endl;
-      return false;
-   }
-
-   while( getline( fin, buf ) ) {
-      boost::split( vals, buf, boost::is_any_of(",") );
-
-      if( vals.size() < 3 ) {
-         cerr << "Grrrrrr" << endl;
-         return false;
-      }
-
-      par = boost::lexical_cast<int>( vals[0] );
-      termin = miTime( vals[1] );
-      val = boost::lexical_cast<float>( vals[2] );
-
-      times.insert( termin );
-      allParameters[par][termin] = val;
-   }
-
-   for( map< int, map<miutil::miTime,float> >::const_iterator it = allParameters.begin();
-        it != allParameters.end(); ++it ) {
-      if( allParameters.count( it->first ) ) {
-         paramet p;
-         p.AddPara( it->first, allParameters[it->first], latitude );
-         modelData.push_back( p );
-      }
-   }
-
-   termins.reserve( times.size() );
-
-   for( set<miTime>::const_iterator it=times.begin(); it != times.end(); ++it )
-      termins.push_back( *it );
-
-   return true;
+    modelData.clear();
+    termins.clear();
+    
+    std::ifstream fin( filename.c_str() );
+    ASSERT_TRUE(fin);
+    
+    while (std::getline(fin, buf)) {
+        boost::split( vals, buf, boost::is_any_of(",") );
+        ASSERT_LE(3, vals.size());
+        
+        par = boost::lexical_cast<int>( vals[0] );
+        termin = miTime( vals[1] );
+        val = boost::lexical_cast<float>( vals[2] );
+        
+        times.insert( termin );
+        allParameters[par][termin] = val;
+    }
+    
+    for (std::map< int, std::map<miutil::miTime,float> >::const_iterator it = allParameters.begin();
+         it != allParameters.end(); ++it )
+    {
+        if (allParameters.count(it->first)) {
+            paramet p;
+            p.AddPara( it->first, allParameters[it->first], latitude );
+            modelData.push_back( p );
+        }
+    }
+    
+    termins.reserve( times.size() );
+   
+    for (std::set<miTime>::const_iterator it=times.begin(); it != times.end(); ++it)
+        termins.push_back( *it );
 }
 
-
-
-class Common : public TestCase {
-
-protected:
-   void testCreateSymbol_( symbolMaker::Symboltype type ) {
-      miSymbol symbol;
-      std::ostringstream err;
-
-      err << "createSymbol: symbolType: " << type;
-      why = err.str();
-
-      symbol = symbolMaker::createSymbol( type );
-
-      if( symbol.index() != type ||
-            symbolMaker::Symboltype( symbol.index() ) != type )
-         throw std::logic_error( "FAILED: " + err.str() );
-
-      err.str("");
-      err << "symbol2type: symbolType: " << type ;
-      why = err.str();
-      symbolMaker::Symboltype symbolType = symbolMaker::symbol2type( symbol );
-
-      if( symbolType != type )
-         throw std::logic_error( "FAILED: " + err.str() );
-   }
-
-   void testCreateSymbol( symbolMaker::Symboltype type, bool expect=true ) {
-      try{
-         testCreateSymbol_( type );
-         if( !expect ) {
-            throw std::logic_error("FAILED: " + why );
-         }
-      }
-      catch( const std::exception &ex ) {
-         if( expect )
-            throw std::logic_error("FAILED: " + why );
-      }
-   }
-};
-
-class test_createSymbol_and_symbol2type: public Common {
-
-   TestOutcome run(void) {
-
-      try {
-         testCreateSymbol( symbolMaker::Sun );
-         testCreateSymbol( symbolMaker::PartlyCloud );
-         testCreateSymbol( symbolMaker::SleetSunThunder );
-         testCreateSymbol( symbolMaker::SleetThunder  );
-         testCreateSymbol( symbolMaker::ErrorSymbol );
-      }
-      catch( const std::exception &ex ) {
-         why = ex.what();
-         return fail;
-      }
-
-      why = "createSymbol and symbol2type.";
-      return pass;
-   }
-};
-
-
-
-class test_customNumber: public Common {
-
-   TestOutcome run(void) {
-      testCreateSymbol( symbolMaker::PartlyCloud );
-
-      why = "miSymbol: customNumber and customName.";
-
-      miSymbol symbol = symbolMaker::createSymbol( symbolMaker::PartlyCloud );
-
-      if( symbol.customNumber( true ) != 3 ) {
-         why = "FAILED: customNumber (light): PartlyCloud: expecting 3.";
-         return fail;
-      }
-
-      if( symbol.customNumber( false ) != 17 ) {
-         why = "FAILED: customNumber (dark): PartlyCloud: expecting 17.";
-         return fail;
-      }
-
-      if( symbol.customName( true ) != "delvis skyet" ) {
-         why = "FAILED: customName: PartlyCloud: got '" + symbol.customName()+"' expecting 'delvis skyet'";
-         return fail;
-      }
-      return pass;
-   }
-};
-
-class test_computeWithoutStateOfAggregate: public Common {
-
-   TestOutcome run(void) {
-      symbolMaker sm;
-      vector<paramet> modelData;
-      vector<miTime> termins;
-      string datafile(pumetdir + "/check-data1.dat");
-      if( ! readData( datafile, modelData, termins ) ) {
-         why = "FAILED - computeWithoutStateOfAggregate: Cant read data file <" + datafile +">.";
-         return fail;
-      }
-
-      vector<miSymbol> symbols;
-      symbols = sm.computeWithoutStateOfAggregate(
-            modelData, termins, 1, 0, true );
-
-      if( symbols.size() == 0 ) {
-         why = "FAILED - computeWithoutStateOfAggregate: no symbols.";
-         return fail;
-      }
-
-      for(vector<miSymbol>::iterator it=symbols.begin();
-            it != symbols.end(); ++it )
-         cout << it->getTime() << ": " << it->customNumber() << " : "
-              << it->index() << " : " << it->customName() << endl;
-
-      return pass;
-   }
-};
-
-
-int
-main(void)
+static void testCreateSymbol(symbolMaker::Symboltype type)
 {
-   symbolMaker::readSymbols( pumetdir + "/check-qbSymbols.def");
+    miSymbol symbol = symbolMaker::createSymbol(type);
+    if (symbol.index() != type or symbolMaker::Symboltype( symbol.index() ) != type)
+        FAIL() << "createSymbol: symbolType: " << type;
+    
+    symbolMaker::Symboltype symbolType = symbolMaker::symbol2type( symbol );
+    if (symbolType != type)
+        FAIL() << "symbol2type: symbolType: " << type ;
+}
 
-   TestPlan tp;
-   tp.comment( "symbolMaker");
-   tp.add( new test_createSymbol_and_symbol2type() );
-   tp.add( new test_customNumber() );
-   tp.add( new test_computeWithoutStateOfAggregate() );
-   tp.run();
+TEST(SymbolMakerTest, CreateSymbolAndSymbol2type)
+{
+    ASSERT_NO_THROW(testCreateSymbol( symbolMaker::Sun ));
+    ASSERT_NO_THROW(testCreateSymbol( symbolMaker::PartlyCloud ));
+    ASSERT_NO_THROW(testCreateSymbol( symbolMaker::SleetSunThunder ));
+    ASSERT_NO_THROW(testCreateSymbol( symbolMaker::SleetThunder  ));
+    ASSERT_NO_THROW(testCreateSymbol( symbolMaker::ErrorSymbol ));
+}
 
-   return tp.am_exit_code();
+TEST(SymbolMakerTest, CustomNumber)
+{
+    symbolMaker::readSymbols(std::string(PUMETDIR) + "/check-qbSymbols.def");
+    ASSERT_NO_THROW(testCreateSymbol(symbolMaker::PartlyCloud));
+
+    miSymbol symbol = symbolMaker::createSymbol( symbolMaker::PartlyCloud );
+
+    EXPECT_EQ(3, symbol.customNumber(true));
+    EXPECT_EQ(17, symbol.customNumber(false));
+    EXPECT_EQ("delvis skyet", symbol.customName(true));
+};
+
+TEST(SymbolMakerTest, ComputeWithoutStateOfAggregate)
+{
+    std::vector<paramet> modelData;
+    std::vector<miTime> termins;
+    std::string datafile(std::string(PUMETDIR)+ "/check-data1.dat");
+    readData(datafile, modelData, termins);
+
+    symbolMaker sm;
+    std::vector<miSymbol> symbols;
+    symbols = sm.computeWithoutStateOfAggregate(modelData, termins, 1, 0, true);
+
+    ASSERT_FALSE(symbols.empty());
 }

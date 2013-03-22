@@ -63,13 +63,15 @@ check_PROGRAMS = \
 
 check_symbolMaker_SOURCES = check-symbolMaker.cc
 check_symbolMaker_CPPFLAGS = \
-	-I$(top_srcdir) \
-	-DPUMETDIR="\""$(top_srcdir)/puMet"\"" 
-
-check_symbolMaker_LDFLAGS = $(CURL_LDFLAGS)
+    -I$(top_srcdir) \
+    -DPUMETDIR="\""$(top_srcdir)/puMet"\"" \
+    $(gtest_CFLAGS)
+check_symbolMaker_LDFLAGS = \
+    $(CURL_LDFLAGS)
 check_symbolMaker_LDADD = \
-	libpuMet.la \
-	$(top_builddir)/puTools/libpuTools.la $(CURL_LIBS)
-
+    -lgtest_main \
+    libpuMet.la \
+    $(top_builddir)/puTools/libpuTools.la $(CURL_LIBS) -lpthread \
+    $(gtest_LIBS)
 
 TESTS = $(check_PROGRAMS)
