@@ -1,9 +1,7 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2013 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -27,22 +25,13 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #ifndef _miSymbol_h
 #define _miSymbol_h
-
 
 #include <puTools/miString.h>
 #include <puTools/miTime.h>
 
 #include <vector>
-#include <iostream>
-#include <algorithm>
-
-#include <stdio.h>
-#include <math.h>
-#include <float.h>
-
 
 // class to hold a numeric weather identifier, and a string
 // with the description of the weather. This part of the symbol

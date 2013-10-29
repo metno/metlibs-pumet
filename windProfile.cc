@@ -1,9 +1,7 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2013 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -43,9 +41,11 @@
 
 #include "windProfile.h"
 
-using namespace std;
-using namespace miutil;
+#include <algorithm>
+#include <cmath>
+#include <iostream>
 
+using namespace std;
 
 // general constants and functions
 
@@ -317,8 +317,8 @@ bool Uprofile::compute(double zref,double speedZref, double z, double increm){
 
 // 3rd case computes a vector with a free number of z
 
-bool Uprofile::compute( double zref,double speedZref, vector<double> z){
-
+bool Uprofile::compute( double zref,double speedZref, std::vector<double> z)
+{
   values *speedtmp;
   double spdtmp;
   double zZero;
@@ -365,7 +365,6 @@ void Uprofile::editRi(double rich){
 };
 
 
-
 void Uprofile::setRi(double mslp, double sst,
 		     double thetaN, double zref, double speedZref){
 
@@ -382,7 +381,6 @@ void Uprofile::setRi(double mslp, double sst,
   double pN;                       // pressure at lvl. N
   double dz;                       // z difference (sea lvl and model lvl 31)
   double ddN2;                     // square of speedZref
-
 
 
   if(mslp < 10000)
@@ -409,51 +407,9 @@ void Uprofile::setRi(double mslp, double sst,
     ddN2 = 0.01;
 
   Ri = G/theta *( (thetaN - thetaS)/dz ) /( ddN2 / pow(zref,2) );
+}
 
-
-
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void Uprofile::error()
+{
+  std::cout << errorOut << std::endl;
+}

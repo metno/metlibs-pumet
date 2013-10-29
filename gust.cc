@@ -36,18 +36,18 @@
 #include "config.h"
 #endif
 
-#include <fstream>
 #include "gust.h"
 
-using namespace std;
-using namespace miutil;
+#include <puTools/miStringFunctions.h>
+#include <fstream>
 
+using namespace std;
 
 // functions to access a gust factor
 //    1st step : search the station name
 //       computes only the gust factor
 
-bool tafGF::getGustFact(miString Name, float DD,float FF, float& gf){
+bool tafGF::getGustFact(const std::string& Name, float DD,float FF, float& gf){
   for (int i=0; i<stations.size();i++){
     if(Name == stations[i].name){
       return(stations[i].getSTgust(DD,FF,gf));
@@ -60,7 +60,7 @@ bool tafGF::getGustFact(miString Name, float DD,float FF, float& gf){
 
 //       like getGustFact, but computes gust
 
-bool tafGF::getGust(miString Name, float DD,float FF, float& gf){
+bool tafGF::getGust(const std::string& Name, float DD,float FF, float& gf){
   if(!getGustFact(Name,DD,FF,gf)){
     gf = FF;
     return(false);
@@ -90,14 +90,14 @@ bool station::getSTgust( float DD,float FF, float& gf){
 
 // function to read in all gust factors from file
 
-bool tafGF::readIn(miString fname){
+bool tafGF::readIn(const std::string& fname){
   gustfactor *gtemp;           //  stores all
   sector *stemp;               //  stores a DD-sector
   sector *ftemp;               //  stores a FF-sector
   float sectMin, sectMax;      //  DD-sector Borders
   float FFmin  , FFmax;        //  FF-sector Borders
   float gustInp;               //  The gust factor from file
-  miString statMi= "";         //  Name of the Station ENAN...
+  string statMi= "";           //  Name of the Station ENAN...
   ifstream gfFile;             //  the input file
   int NOofGF;                  //  Number of Gust factors / DD-sector
 
@@ -113,7 +113,7 @@ bool tafGF::readIn(miString fname){
     // reads strings until {
 
     gfFile>>statMi;
-    statMi.trim();
+    miutil::trim(statMi);
 
     if(statMi =="{"){
       station temp;
@@ -166,6 +166,3 @@ bool tafGF::readIn(miString fname){
   gfFile.close();
   return(true);
 }
-
-
-

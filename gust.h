@@ -1,9 +1,7 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2013 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -37,13 +35,8 @@
 #ifndef _gust_h
 #define _gust_h
 
-#include <stdio.h>
-
-#include <puTools/miString.h>
-
+#include <string>
 #include <vector>
-#include <iostream>
-
 
 // pass the wind direction into a sector and the
 // wind speed into a range (minimum and maximum)
@@ -79,7 +72,7 @@ public:
 class station {
 
 public:
-  miutil::miString name;              // station name (i.e. ENAN)
+  std::string name;              // station name (i.e. ENAN)
   std::vector<gustfactor> gust;    // vector with all gf-vectors/sort.by DD
   std::vector<sector> FFsec;       // the FF sectors (station depended)
   bool getSTgust(float DD,float FF, float& gf );
@@ -106,11 +99,10 @@ private:
   std::vector<station> stations;   // vector with all stations
 public:
   tafGF() {}
-  bool readIn(miutil::miString fname);
-  bool getGustFact(miutil::miString name, float DD,float FF, float& gf);
-  bool getGust(miutil::miString Name, float DD,float FF, float& gf);
+  bool readIn(const std::string& fname);
+  bool getGustFact(const std::string& name, float DD,float FF, float& gf);
+  bool getGust(const std::string& Name, float DD,float FF, float& gf);
 
 };
-
 
 #endif

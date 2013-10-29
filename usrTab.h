@@ -1,9 +1,7 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2013 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -35,10 +33,6 @@
 #include <puTools/miTime.h>
 
 #include <map>
-#include <iostream>
-
-#include <math.h>
-#include <stdio.h>
 
 class usrTab {
 private:
@@ -76,13 +70,6 @@ public:
   { return ( bool(entity.count(m)) ? entity[m] : mNull); }
 
   std::map<miutil::miString,miutil::miString> selected(const std::vector<miutil::miString> & );
-
-
-
 };
 
 #endif
-
-
-
-

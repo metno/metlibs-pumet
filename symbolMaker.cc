@@ -1,9 +1,7 @@
 /*
  libpuMet - Meteorological algorithms (Weather symbol generator etc.)
 
- $Id$
-
- Copyright (C) 2006 met.no
+ Copyright (C) 2006-2013 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -31,8 +29,13 @@
 #include "config.h"
 #endif
 
-#include <fstream>
 #include "symbolMaker.h"
+
+#include <puTools/puMathAlgo.h>
+
+#include <cfloat>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 using namespace miutil;
@@ -1148,6 +1151,13 @@ stateMaker( miSymbol &symbol__, float temperature,
    }
 
    return ret;
+}
+
+bool
+symbolMaker::
+stateMaker(miSymbol &symbol_, float temperature)
+{
+  return stateMaker(symbol_, temperature, FLT_MAX);
 }
 
 

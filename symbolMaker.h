@@ -1,9 +1,7 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2013 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -37,16 +35,9 @@
 
 #include <puTools/miString.h>
 #include <puTools/miTime.h>
-#include <puTools/puMathAlgo.h>
 
 #include <vector>
-#include <iostream>
-#include <algorithm>
 #include <map>
-
-#include <stdio.h>
-#include <math.h>
-
 
 // this program is used to compute weather symbols from
 // cloud, precip and temperature data.
@@ -243,7 +234,9 @@ public:
 
   static bool stateMaker( miSymbol &symbol_,
                           float temperature,
-                          float stateOfAggregate = FLT_MAX  );
+                          float stateOfAggregate);
+  static bool stateMaker( miSymbol &symbol_,
+                          float temperature);
 
   /**
    *  Valid values for stateOfAggregate.
@@ -376,7 +369,5 @@ operator!=( const miSymbol &lhs, const symbolMaker::Symboltype &rhs );
 
 bool
 operator!=( const symbolMaker::Symboltype &lhs, const miSymbol &rhs );
-
-
 
 #endif

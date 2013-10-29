@@ -1,9 +1,7 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2013 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -31,8 +29,14 @@
 #include "config.h"
 #endif
 
-#include <fstream>
 #include "miSymbol.h"
+
+#include <algorithm>
+#include <cstdio>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <float.h>
 
 using namespace std;
 using namespace miutil;

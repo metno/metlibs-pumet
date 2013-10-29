@@ -1,9 +1,7 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2013 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -34,12 +32,7 @@
 #ifndef _windProfile_h
 #define _windProfile_h
 
-#include <math.h>
-
-#include <puTools/miString.h>
-
-#include <algorithm>
-#include <iostream>
+#include <string>
 #include <vector>
 
 // stores the single point speed at height z and z itself
@@ -82,7 +75,7 @@ public:
 
 class Uprofile {
 private:
-  miutil::miString errorOut;
+  std::string errorOut;
   double Ustar ;
   std::vector <values> wind;
   double Ri;
@@ -92,9 +85,9 @@ public:
 
   void setRi(double mslp, double sst, double thetaN,double zref, double speedZref);
   void editRi(double rich);
-  float compute( double zref,double speedZref, double z);
-  bool  compute( double zref,double speedZref, double z, double increm);
-  bool  compute( double zref,double speedZref, std::vector <double> z);
+  float compute(double zref,double speedZref, double z);
+  bool  compute(double zref,double speedZref, double z, double increm);
+  bool  compute(double zref,double speedZref, std::vector <double> z);
 
   int length() const {return wind.size();};
 
@@ -103,14 +96,7 @@ public:
   double gust(double z, double spd);
   double gust(int i);
   double getRi() const {return Ri;}
-  void error(){std::cout<<errorOut<<std::endl;};
+  void error();
 };
 
 #endif
-
-
-
-
-
-
-
