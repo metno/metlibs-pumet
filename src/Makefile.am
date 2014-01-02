@@ -2,10 +2,6 @@
 
 pkgname = puMet
 
-include $(top_srcdir)/metlibs.mk
-
-EXTRA_DIST += check-qbSymbols.def
-
 lib_LTLIBRARIES=libpuMet.la
 
 libpuMet_la_SOURCES = \
@@ -26,52 +22,30 @@ libpuMet_la_SOURCES = \
 	visibility.cc \
 	WindCalc.cc
 
-libpuMet_la_CPPFLAGS = \
-	${PUTOOLS_CPPFLAGS}
-
-libpuMet_la_LDFLAGS = ${puMet_VERSION_INFO}
-if ENABLE_SHARED_LIBRARY
-libpuMet_la_LDFLAGS += \
-	${PUTOOLS_LDFLAGS}
-
-libpuMet_la_LIBADD = \
-	${PUTOOLS_LIBS}
-endif
 
 pkg_includedir= ${includedir}/puMet
 
-pkg_include_HEADERS = \
-	addWeather.h \
-	cloudGrp.h \
-	ff2beaufort.h \
-	gust.h \
-	humidity.h \
-	iceAccretion.h \
-	miSymbol.h \
-	paramet.h \
-	ptStatistics.h \
-	symbolMaker.h \
-	usrTab.h \
-	visibility.h \
-	vision.h \
-	weatherSpec.h \
-	windProfile.h \
-	WindCalc.h
+pkg_include_HEADERS = $(libpuMet_la_SOURCES:.cc=.h)
 
-check_PROGRAMS = \
-	check-symbolMaker
 
-check_symbolMaker_SOURCES = check-symbolMaker.cc
-check_symbolMaker_CPPFLAGS = \
-    -I$(top_srcdir) \
-    -DPUMETDIR="\""$(top_srcdir)/puMet"\"" \
-    $(gtest_CFLAGS)
-check_symbolMaker_LDFLAGS = \
-    $(CURL_LDFLAGS)
-check_symbolMaker_LDADD = \
-    -lgtest_main \
-    libpuMet.la \
-    $(top_builddir)/puTools/libpuTools.la $(CURL_LIBS) -lpthread \
-    $(gtest_LIBS)
+
+libpuMet_la_CPPFLAGS = ${PUTOOLS_CPPFLAGS}
+
+libpuMet_la_LDFLAGS = ${VERSION_INFO}
+
+if ENABLE_SHARED_LIBRARY
+libpuMet_la_LDFLAGS += ${PUTOOLS_LDFLAGS}
+libpuMet_la_LIBADD   = ${PUTOOLS_LIBS}
+endif
+
+check_PROGRAMS = check-symbolMaker
+
+check_symbolMaker_SOURCES  =  check-symbolMaker.cc
+check_symbolMaker_CPPFLAGS =  ${PUTOOLS_CPPFLAGS}  $(gtest_CFLAGS)
+check_symbolMaker_LDFLAGS  =  $(PUTOOLS_LDFLAGS)
+check_symbolMaker_LDADD    = -lgtest_main libpuMet.la \
+	$(PUTOOLS_LIBS) -lpthread $(gtest_LIBS)
 
 TESTS = $(check_PROGRAMS)
+
+EXTRA_DIST = check-qbSymbols.def

@@ -3,10 +3,10 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT([puTools], [5.0.0], [diana@met.no])
+AC_INIT([puMet], [5.0.0], [diana@met.no])
 AM_INIT_AUTOMAKE([foreign])
 
-AC_CONFIG_SRCDIR([src/miString.h])
+AC_CONFIG_SRCDIR([src/symbolMaker.h])
 AC_CONFIG_MACRO_DIR([m4])
 
 METNO_SET_VERSION_INFO(6.0.0)
@@ -31,17 +31,10 @@ AC_LANG_POP([C++])
 
 METNO_ENABLE_CONDITIONAL([SHARED_LIBRARY], [shared])
 
-METNO_ENABLE([XFONTS], [xfonts], [support for X bitmap fonts], [no])
-METNO_ENABLE_CONDITIONAL([XFONTS], [xfonts])
-
-
-METNO_REQUIRE_PKG([MILOGGER],[miLogger])
-METNO_REQUIRE_PKG([PUCTOOLS],[puCtools])
-METNO_REQUIRE_C_LIBRARY([CURL], [curl], [curl/curl.h])
-
+METNO_REQUIRE_PKG([PUTOOLS],[puTools])
 
 AC_CONFIG_FILES([
-	puTools.pc
+	puMet.pc
 	Makefile
 	src/Makefile
 ])
