@@ -49,3 +49,6 @@ check_symbolMaker_LDADD    = -lgtest_main libpuMet.la \
 TESTS = $(check_PROGRAMS)
 
 EXTRA_DIST = check-qbSymbols.def
+
+
+INSTALL = install -p
