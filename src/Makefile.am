@@ -1,4 +1,3 @@
-# $Id$
 
 pkgname = puMet
 
@@ -38,17 +37,17 @@ libpuMet_la_LDFLAGS += ${PUTOOLS_LDFLAGS}
 libpuMet_la_LIBADD   = ${PUTOOLS_LIBS}
 endif
 
+if HAVE_GTEST
 check_PROGRAMS = check-symbolMaker
-
-check_symbolMaker_SOURCES  =  check-symbolMaker.cc
-check_symbolMaker_CPPFLAGS =  ${PUTOOLS_CPPFLAGS}  $(gtest_CFLAGS)
-check_symbolMaker_LDFLAGS  =  $(PUTOOLS_LDFLAGS)
-check_symbolMaker_LDADD    = -lgtest_main libpuMet.la \
-	$(PUTOOLS_LIBS) -lpthread $(gtest_LIBS)
-
 TESTS = $(check_PROGRAMS)
 
-EXTRA_DIST = check-qbSymbols.def
+check_symbolMaker_SOURCES  =  check-symbolMaker.cc
+check_symbolMaker_CPPFLAGS = -DPUMETDIR=\"$(srcdir)\" ${PUTOOLS_CPPFLAGS} $(gtest_CFLAGS)
+check_symbolMaker_LDFLAGS  =  $(PUTOOLS_LDFLAGS) $(gtest_LDFLAGS)
+check_symbolMaker_LDADD    = -lgtest_main libpuMet.la \
+	$(PUTOOLS_LIBS) -lpthread $(gtest_LIBS)
+endif
 
+EXTRA_DIST = check-qbSymbols.def
 
 INSTALL = install -p
