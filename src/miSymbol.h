@@ -69,54 +69,42 @@ private:
   miutil::miTime tim;                 // time where the symbol is valid
   bool lightstat;             // switch from light to dark
 public:
-  miSymbol(){}
-  miSymbol(const int i , const bool ch)
-    : intNum(i),
-      changeSig(ch) {}
-  void AddCodes(code l, code d){
-    light = l;
-    dark = d;
-  }
+  miSymbol()
+    {}
+  miSymbol(int i, bool ch)
+    : intNum(i), changeSig(ch) {}
+  void AddCodes(code l, code d)
+    { light = l; dark = d; }
 
-  void setBase(const int i , const bool ch) { 
-    intNum=i;
-    changeSig=ch; 
-  }
-  void setLightStat(miutil::miTime,float);
+  void setBase(int i, bool ch)
+    { intNum=i; changeSig=ch; }
   void AddErr(const std::string& errMessage);
+  void setLightStat(const miutil::miTime&, float);
   void setLightStat(bool);
   bool getLightStat()const;
-  void setTime(miutil::miTime t){tim = t;};
+  void setTime(const miutil::miTime& t)
+    { tim = t; }
 
   int vis();
-  int index()const {return intNum;}
+  int index() const
+    { return intNum; }
 
-
-  int customNumber()const;
-  int customNumber(bool lightState)const;
-  bool change() const {return changeSig;};
-  friend bool operator==( const miSymbol& lhs, const miSymbol& rhs){
-    return(lhs.intNum == rhs.intNum);}
-
-  friend bool operator!=( const miSymbol& lhs, const miSymbol& rhs){
-    return(lhs.intNum != rhs.intNum);}
+  int customNumber() const;
+  int customNumber(bool lightState) const;
+  bool change() const
+    { return changeSig; }
   std::string customName() const;
   std::string customName(bool lightState) const;
   miutil::miTime getTime() const
     { return tim; }
   std::string picture();
   std::string picture(bool);
+  friend bool operator==(const miSymbol& lhs, const miSymbol& rhs)
+    { return(lhs.intNum == rhs.intNum); }
+
+  friend bool operator!=(const miSymbol& lhs, const miSymbol& rhs)
+    { return(lhs.intNum != rhs.intNum); }
 
 };
 
-
 #endif
-
-
-
-
-
-
-
-
-

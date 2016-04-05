@@ -38,23 +38,23 @@ bool WindCalc::readFactors(const std::string& filename)
 
     if ( vs.size() != 2 ) {
       cerr << "Warning, illegal line in wind-information file:"
-	   << buf << endl
-	   << " Syntax is:" << syntax << endl;
+           << buf << endl
+           << " Syntax is:" << syntax << endl;
       continue;
     }
     if (!miutil::is_number(vs[1])) {
       cerr << "Warning, illegal entry in wind-information file:"
-	   << buf << endl
-	   << " Syntax is:" << syntax << endl;
+           << buf << endl
+           << " Syntax is:" << syntax << endl;
       continue;
     }
     float value = miutil::to_float(vs[1]);
 
-    if ( vvs.size() != 3){
     const vector<std::string> vvs = miutil::split(vs[0], "_");
+    if (vvs.size() != 3) {
       cerr << "Warning, illegal entry in wind-information file:"
-	   << buf << endl
-	   << " Syntax is:" << syntax << endl;
+           << buf << endl
+           << " Syntax is:" << syntax << endl;
       continue;
     }
 
@@ -67,20 +67,20 @@ bool WindCalc::readFactors(const std::string& filename)
 
     if ( !miutil::is_int(vvs[1])) {
       cerr << "Warning, illegal entry in wind-information file:"
-	   << buf << endl
-	   << " Syntax is:" << syntax << endl;
+           << buf << endl
+           << " Syntax is:" << syntax << endl;
       continue;
     }
     int height = miutil::to_int(vvs[1]);
 
     if (miutil::to_lower(vvs[2]) == "gust") {
       gust_factors[height][stability] = value;
-    } else if ( vvs[2].downcase() == "mean" ){
+    } else if (miutil::to_lower(vvs[2]) == "mean") {
       wind_factors[height][stability] = value;
     } else {
       cerr << "Warning, expected GUST or MEAN in:"
-	   << buf << endl
-	   << " Syntax is:" << syntax << endl;
+           << buf << endl
+           << " Syntax is:" << syntax << endl;
       continue;
     }
   }
@@ -101,8 +101,6 @@ float WindCalc::gust(float wind10m, int stability, int height){
     return wind10m;
   return gust_factors[height][stability] * wind10m;
 }
-
-
 
 int WindCalc::beaufort(float wind10m, std::string& tekst)
 {

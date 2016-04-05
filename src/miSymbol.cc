@@ -39,13 +39,13 @@
 #include <float.h>
 
 using namespace std;
-using namespace miutil;
 
 
 // checks out the lightstatus ( false = darkness) and returns the
 // customer requested number
 
-int miSymbol::customNumber(bool lstat)const{
+int miSymbol::customNumber(bool lstat) const
+{
   if (lstat == false)
     return dark.extNum;
   return light.extNum;
@@ -63,17 +63,15 @@ std::string miSymbol::picture(bool lstat)
   if (lstat == false)
     return dark.pic;
   return light.pic;
-};
+}
 
 
-
-
-
-int miSymbol::customNumber()const{
+int miSymbol::customNumber()const
+{
   if (lightstat == false)
     return dark.extNum;
   return light.extNum;
-};
+}
 
 
 // like customNumber, but for the Name
@@ -82,7 +80,7 @@ std::string miSymbol::customName() const
   if (lightstat == false)
     return dark.name;
   return light.name;
-};
+}
 
 
 std::string miSymbol::customName(bool lightState_) const
@@ -90,14 +88,14 @@ std::string miSymbol::customName(bool lightState_) const
    if (lightState_ == false)
      return dark.name;
    return light.name;
-
 }
 
 
 // visibility
-int miSymbol::vis(){
+int miSymbol::vis()
+{
   return light.vision;
-};
+}
 
 
 // changes the occured error string to the  error symbol
@@ -111,14 +109,15 @@ void miSymbol::AddErr(const std::string& errMessage)
 // function to determine the state of the sun
 // at the requested station. If the sun is below the horizon,
 // the switch for sun/darkness becomes false else true
-void miSymbol::setLightStat(bool setting){
+void miSymbol::setLightStat(bool setting)
+{
   lightstat = setting;
 }
 
 
 
-void miSymbol::setLightStat(miTime termin, float glat){
-
+void miSymbol::setLightStat(const miutil::miTime& termin, float glat)
+{
   double lat = glat;
   double pcirc = 66.55;
   double doy = double(termin.dayOfYear())+1.0;
@@ -129,20 +128,13 @@ void miSymbol::setLightStat(miTime termin, float glat){
 
   senit = senit +1;
 
-  if( lat <= (pcirc+1))
+  if (lat <= (pcirc+1))
     lightstat =  true;
   else
     lightstat = (senit >= 0);
-
-};
-
-bool
-miSymbol::
-getLightStat()const
-{
-	return lightstat;
 }
 
-
-
-
+bool miSymbol::getLightStat() const
+{
+  return lightstat;
+}

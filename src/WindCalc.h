@@ -1,10 +1,4 @@
-
-#ifndef WINDCALC_H
-#define WINDCALC_H
-
 /*
-  $Id$
-
   Copyright (C) 2006 met.no
 
   Contact information:
@@ -29,6 +23,9 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#ifndef WINDCALC_H
+#define WINDCALC_H
+
 #include <string>
 #include <map>
 
@@ -38,7 +35,6 @@ private:
   std::map<int, std::map<int, float> > gust_factors;
   //  height   stability
   std::map<int, std::map<int, float> > wind_factors;
-
 
 public:
   WindCalc() {}

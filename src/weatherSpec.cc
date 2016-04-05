@@ -1,8 +1,6 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
 
-  $Id$
-
   Copyright (C) 2006 met.no
 
   Contact information:
@@ -44,24 +42,26 @@ void weatherSpec::AddToList(int i, const std::string& txt1, const std::string& t
   tmp.txt[1] = txt2;
   tmp.txt[2] = txt3;
   list.push_back(tmp);
-};
+}
 
-   for(int count = 0; count < list.size(); count++){
-    if(list[count].index == ind)
 std::string weatherSpec::textOut(int ind, int txtNum)
 {
+  for (int count = 0; count < list.size(); count++) {
+    if (list[count].index == ind)
       return(list[count].txt[txtNum]);
   }
-  return("");
-};
+  return std::string();
+}
+
 std::string weatherSpec::text(int ind)
 {
   return textOut(ind,0);
-};
+}
+
 int weatherSpec::maxv()
 {
   int mx = - 100000;
-  for(int c = 0; c < list.size(); c++)
+  for (int c = 0; c < list.size(); c++)
     if(list[c].index > mx)
       mx = list[c].index;
   return mx;
@@ -74,5 +74,4 @@ int weatherSpec::minv()
     if(list[c].index < mi)
       mi = list[c].index;
   return mi;
-
 }

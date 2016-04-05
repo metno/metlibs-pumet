@@ -27,8 +27,6 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
-
 // this little program is ment to be as an translation from the
 // vision index you get from miSymbol. The translation can after
 // intitialising direct be used by miSymbol....
@@ -39,11 +37,8 @@
 
 #include "vision.h"
 
-using namespace std;
-using namespace miutil;
-
-
-vision::vision(){
+vision::vision()
+{
 /*
  * // As used in RIGG - removed 26.march 2009
     AddToList( 1,"0.5", "0-1",   "0-1"               );
@@ -68,56 +63,42 @@ vision::vision(){
     AddToList( 9,"7",   "4-10",  "4-10 @{inShowers}" );
     AddToList(10,"8",   "6-10",  "6-10"              );
     AddToList(11,"10+", "10+",   "10+"               );
-
-
-};
+}
 
 
 std::string vision::singleRange(int inp)
 {
   return textOut(inp,0);
-};
+}
 
 std::string vision::range(int inp)
 {
   return textOut(inp,1);
-};
+}
+
 std::string vision::rangeAndtext(int inp)
 {
   return textOut(inp,2);
-};
+}
 
-bool vision::signChange(int custom1, int custom2){
+bool vision::signChange(int custom1, int custom2)
+{
   if ((custom1==custom2) || (custom1*custom2== (9*10)) )
     return false;
   return true;
-};
+}
 
-int vision::findVision(int inp, int xweath){
+int vision::findVision(int inp, int xweath)
+{
   int vis = mapToVis(xweath);
   return ((vis < inp) ? vis : inp);
-};
+}
 
-int vision::mapToVis(int inp){
+int vision::mapToVis(int inp)
+{
   if(inp == 1 )
     return 2;
   if(inp == 2)
     return 5;
   return 11;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

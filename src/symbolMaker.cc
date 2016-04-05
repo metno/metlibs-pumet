@@ -144,10 +144,7 @@ std::string symbolMaker::picture(Symboltype type, bool lights)
 }
 
 
-
 // reads symbol data from file, and builds the classes for symbols out of it
-
-
 void symbolMaker::readSymbols(const std::string &SymbolFname)
 {
    initializeSymbols();
@@ -859,7 +856,6 @@ isShower(int custom)
 
 void symbolMaker::make_pos_symbols(map<int, int>& index, map<int, std::string>& image)
 {
-
    index.clear();
    image.clear();
 

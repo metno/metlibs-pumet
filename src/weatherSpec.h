@@ -1,8 +1,6 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
 
-  $Id$
-
   Copyright (C) 2006 met.no
 
   Contact information:

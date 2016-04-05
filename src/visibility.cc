@@ -1,8 +1,6 @@
 /*
   libpuMet - Meteorological algorithms (Weather symbol generator etc.)
 
-  $Id$
-
   Copyright (C) 2006 met.no
 
   Contact information:
@@ -31,8 +29,8 @@
 #include "config.h"
 #endif
 
-#include <math.h>
 #include <puTools/miStringFunctions.h>
+#include <cmath>
 #include <iostream>
 
 
