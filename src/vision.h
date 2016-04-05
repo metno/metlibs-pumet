@@ -36,9 +36,9 @@
 class vision : public weatherSpec {
 public:
   vision();
-  miutil::miString range(int);
-  miutil::miString rangeAndtext(int);
-  miutil::miString singleRange(int);
+  std::string range(int);
+  std::string rangeAndtext(int);
+  std::string singleRange(int);
   bool signChange(int, int);
   int findVision(int,int);
   int mapToVis(int);

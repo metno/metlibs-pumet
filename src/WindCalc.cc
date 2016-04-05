@@ -3,13 +3,15 @@
 #endif
 
 #include "WindCalc.h"
+#include <puTools/miStringFunctions.h>
 #include <iostream>
 #include <fstream>
 
 using namespace std;
 using namespace miutil;
 
-bool WindCalc::readFactors(const miString& filename){
+bool WindCalc::readFactors(const std::string& filename)
+{
   cerr << "++ READ wind-information from:" << filename << endl;
 
   // first clean up
@@ -22,15 +24,17 @@ bool WindCalc::readFactors(const miString& filename){
     return false;
   }
 
-  miString buf;
-  miString syntax = "(Stable|Neutral|Instable)_heightinmetre_(Gust|Mean) = floatvalue";
+  std::string buf;
+  std::string syntax = "(Stable|Neutral|Instable)_heightinmetre_(Gust|Mean) = floatvalue";
 
   while (getline(f, buf)){
-    buf.trim();
-    if (buf.length()==0) continue;
-    if (buf[0]=='#') continue;
+    miutil::trim(buf);
+    if (buf.length()==0)
+      continue;
+    if (buf[0]=='#')
+      continue;
 
-    vector<miString> vs= buf.split("=");
+    const vector<std::string> vs = miutil::split(buf, "=");
 
     if ( vs.size() != 2 ) {
       cerr << "Warning, illegal line in wind-information file:"
@@ -38,16 +42,16 @@ bool WindCalc::readFactors(const miString& filename){
 	   << " Syntax is:" << syntax << endl;
       continue;
     }
-    if ( !vs[1].isNumber() ){
+    if (!miutil::is_number(vs[1])) {
       cerr << "Warning, illegal entry in wind-information file:"
 	   << buf << endl
 	   << " Syntax is:" << syntax << endl;
       continue;
     }
-    float value = vs[1].toFloat();
+    float value = miutil::to_float(vs[1]);
 
-    vector<miString> vvs = vs[0].split("_");
     if ( vvs.size() != 3){
+    const vector<std::string> vvs = miutil::split(vs[0], "_");
       cerr << "Warning, illegal entry in wind-information file:"
 	   << buf << endl
 	   << " Syntax is:" << syntax << endl;
@@ -55,21 +59,21 @@ bool WindCalc::readFactors(const miString& filename){
     }
 
     int stability = 0;
-    if ( vvs[0].downcase() == "stable" ){
+    if (miutil::to_lower(vvs[0]) == "stable") {
       stability = 1;
-    } else if ( vvs[0].downcase() == "instable" ){
+    } else if (miutil::to_lower(vvs[0]) == "instable") {
       stability = -1;
     }
 
-    if ( !vvs[1].isInt() ){
+    if ( !miutil::is_int(vvs[1])) {
       cerr << "Warning, illegal entry in wind-information file:"
 	   << buf << endl
 	   << " Syntax is:" << syntax << endl;
       continue;
     }
-    int height = vvs[1].toInt();
+    int height = miutil::to_int(vvs[1]);
 
-    if ( vvs[2].downcase() == "gust" ){
+    if (miutil::to_lower(vvs[2]) == "gust") {
       gust_factors[height][stability] = value;
     } else if ( vvs[2].downcase() == "mean" ){
       wind_factors[height][stability] = value;
@@ -100,7 +104,8 @@ float WindCalc::gust(float wind10m, int stability, int height){
 
 
 
-int WindCalc::beaufort(float wind10m, miString & tekst){
+int WindCalc::beaufort(float wind10m, std::string& tekst)
+{
   //conversion from wind (m/s) to beaufortvalue
   int bf;
   float ms=wind10m;

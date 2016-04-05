@@ -33,9 +33,9 @@
 
 #include "miSymbol.h"
 
-#include <puTools/miString.h>
 #include <puTools/miTime.h>
 
+#include <string>
 #include <vector>
 #include <map>
 

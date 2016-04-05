@@ -51,12 +51,15 @@ int miSymbol::customNumber(bool lstat)const{
   return light.extNum;
 };
 
-miString miSymbol::picture(){
+std::string miSymbol::picture()
+{
   if (lightstat == false)
     return dark.pic;
   return light.pic;
 };
-miString miSymbol::picture(bool lstat){
+
+std::string miSymbol::picture(bool lstat)
+{
   if (lstat == false)
     return dark.pic;
   return light.pic;
@@ -74,15 +77,15 @@ int miSymbol::customNumber()const{
 
 
 // like customNumber, but for the Name
-miString miSymbol::customName()const{
+std::string miSymbol::customName() const
+{
   if (lightstat == false)
     return dark.name;
   return light.name;
 };
 
 
-miutil::miString
-miSymbol::customName( bool lightState_ )const
+std::string miSymbol::customName(bool lightState_) const
 {
    if (lightState_ == false)
      return dark.name;
@@ -98,7 +101,8 @@ int miSymbol::vis(){
 
 
 // changes the occured error string to the  error symbol
-void miSymbol::AddErr(miString errMessage){
+void miSymbol::AddErr(const std::string& errMessage)
+{
   light.AddValues(999, errMessage,9);
   dark.AddValues(999, errMessage,9);
 }

@@ -33,9 +33,9 @@
 #include "miSymbol.h"
 #include "paramet.h"
 
-#include <puTools/miString.h>
 #include <puTools/miTime.h>
 
+#include <string>
 #include <vector>
 #include <map>
 
@@ -118,7 +118,7 @@ private:
 
 
   int customNumber(Symboltype type, bool lights);
-  miutil::miString picture(Symboltype type, bool lights);
+  std::string picture(Symboltype type, bool lights);
 
   miSymbol myerror;
 public:
@@ -149,7 +149,7 @@ public:
 
   void setLogger( std::ostream *olog ) { slog = olog; }
   bool initializeModel(const std::vector<paramet> &data );
-  static void readSymbols(const miutil::miString &symbolConfFile );
+  static void readSymbols(const std::string &symbolConfFile );
   void periods( const std::vector<miutil::miTime> &termins,
                 int min, int max, bool compute_minmax = false);
 
@@ -353,7 +353,7 @@ public:
   static int minCustom() { return MINcustom;}
   static void rainLimits( int hours, float &noRain, float &rain );
 
-  void make_pos_symbols(std::map<int,int>&, std::map<int,miutil::miString>& );
+  void make_pos_symbols(std::map<int,int>&, std::map<int,std::string>&);
 };
 
 

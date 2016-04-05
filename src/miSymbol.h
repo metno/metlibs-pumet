@@ -28,9 +28,9 @@
 #ifndef _miSymbol_h
 #define _miSymbol_h
 
-#include <puTools/miString.h>
 #include <puTools/miTime.h>
 
+#include <string>
 #include <vector>
 
 // class to hold a numeric weather identifier, and a string
@@ -43,26 +43,16 @@ class code {
   friend class miSymbol;
 private:
   int extNum;          // the customers identification Number
-  miutil::miString name;       // the name 1of the weather situation
+  std::string name;       // the name 1of the weather situation
   int vision;          // an identidier for the visibillity in km
-  miutil::miString pic;        // an identifier for a picture (file Name or something )
+  std::string pic;        // an identifier for a picture (file Name or something )
+
 public:
   code(){}
-  void AddValues(int ex, miutil::miString nam, int vis, miutil::miString p){
-    extNum =ex;
-    name = nam;
-    vision = vis;     // here is one of these famous vis addings
-    pic = p;
-  }
-  void AddValues(int ex, miutil::miString nam, int vis){
-    extNum =ex;
-    name = nam;
-    vision = vis;     // here is one of these famous vis addings
-  }
-
-
-
-
+  void AddValues(int ex, const std::string& nam, int vis, const std::string& p)
+    { extNum =ex; name = nam; vision = vis; pic = p; } // here is one of these famous vis addings
+  void AddValues(int ex, const std::string& nam, int vis)
+    { extNum =ex; name = nam; vision = vis; } // here is one of these famous vis addings
 };
 
 // class to hold a symbol
@@ -92,8 +82,8 @@ public:
     intNum=i;
     changeSig=ch; 
   }
-  void AddErr(miutil::miString errMessage );
   void setLightStat(miutil::miTime,float);
+  void AddErr(const std::string& errMessage);
   void setLightStat(bool);
   bool getLightStat()const;
   void setTime(miutil::miTime t){tim = t;};
@@ -105,16 +95,17 @@ public:
   int customNumber()const;
   int customNumber(bool lightState)const;
   bool change() const {return changeSig;};
-  miutil::miString customName()const;
-  miutil::miString customName( bool lightState )const;
-  miutil::miTime getTime() const {return tim;};
-  miutil::miString picture();
-  miutil::miString picture(bool);
   friend bool operator==( const miSymbol& lhs, const miSymbol& rhs){
     return(lhs.intNum == rhs.intNum);}
 
   friend bool operator!=( const miSymbol& lhs, const miSymbol& rhs){
     return(lhs.intNum != rhs.intNum);}
+  std::string customName() const;
+  std::string customName(bool lightState) const;
+  miutil::miTime getTime() const
+    { return tim; }
+  std::string picture();
+  std::string picture(bool);
 
 };
 

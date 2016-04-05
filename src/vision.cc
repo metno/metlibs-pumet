@@ -73,14 +73,17 @@ vision::vision(){
 };
 
 
-miString vision::singleRange(int inp){
+std::string vision::singleRange(int inp)
+{
   return textOut(inp,0);
 };
 
-miString vision::range(int inp){
+std::string vision::range(int inp)
+{
   return textOut(inp,1);
 };
-miString vision::rangeAndtext(int inp){
+std::string vision::rangeAndtext(int inp)
+{
   return textOut(inp,2);
 };
 

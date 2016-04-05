@@ -31,12 +31,12 @@
 #ifndef _weatherSpec_h
 #define _weatherSpec_h
 
-#include <puTools/miString.h>
+#include <string>
 #include <vector>
 
 struct mapping{
   int index;
-  miutil::miString txt[3];
+  std::string txt[3];
 };
 
 class weatherSpec {
@@ -44,9 +44,9 @@ protected:
   std::vector<mapping> list;
 public:
   weatherSpec() {}
-  void AddToList( int, miutil::miString,miutil::miString txt2 = "",miutil::miString txt3 = "" );
-  miutil::miString textOut(int,int);
-  miutil::miString text(int);
+  void AddToList(int, const std::string&, const std::string& txt2 = "", const std::string& txt3 = "");
+  std::string textOut(int,int);
+  std::string text(int);
   int maxv();
   int minv();
 };

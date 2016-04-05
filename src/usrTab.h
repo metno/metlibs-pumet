@@ -29,47 +29,42 @@
 #ifndef _usrTab_h
 #define _usrTab_h
 
-#include <puTools/miString.h>
 #include <puTools/miTime.h>
 
 #include <map>
+#include <string>
+#include <vector>
 
 class usrTab {
 private:
-  std::map<miutil::miString, miutil::miString> entity;
-  miutil::miString mNull;
+  std::map<std::string, std::string> entity;
+  std::string mNull;
+
 public:
-  usrTab(): mNull("") {}
+  usrTab() {}
 
-  bool create( miutil::miString );
+  bool create(const std::string&);
 
-  bool exists(miutil::miString m) const
-  { return ( bool(entity.count(m)) ? true: false);}
+  bool exists(const std::string& m) const;
 
-  miutil::miTime dates( miutil::miString );
+  miutil::miTime dates(const std::string&);
 
-  miutil::miString content( miutil::miString m)
-  { return ( bool(entity.count(m)) ? entity[m] : mNull); }
+  std::string content(const std::string& m) const;
 
-  miutil::miString replace( miutil::miString m)
-  { return ( bool(entity.count(m)) ? entity[m] : m);}
+  std::string replace(const std::string& m) const;
 
-  miutil::miString file( miutil::miString m)
-  { return entity["WORKDIR"]+ content(m); }
+  std::string file(const std::string& m) const;
 
-  void makeByHand(miutil::miString m, miutil::miString requ)
-  { entity[m]= requ;}
+  void makeByHand(const std::string& m, const std::string& requ);
 
-  int numInt(miutil::miString m)
-    { return atoi(entity[m].c_str());}
+  int numInt(const std::string& m) const;
 
-  float numFloat( miutil::miString m)
-    { return atof(entity[m].c_str());}
+  float numFloat(const std::string& m) const;
 
-  miutil::miString operator[] ( const miutil::miString &m )
-  { return ( bool(entity.count(m)) ? entity[m] : mNull); }
+  std::string operator[] (const std::string &m) const
+    { return content(m); }
 
-  std::map<miutil::miString,miutil::miString> selected(const std::vector<miutil::miString> & );
+  std::map<std::string,std::string> selected(const std::vector<std::string> & );
 };
 
 #endif

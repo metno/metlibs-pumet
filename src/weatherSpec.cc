@@ -34,10 +34,10 @@
 #include "weatherSpec.h"
 
 using namespace std;
-using namespace miutil;
 
 
-void weatherSpec::AddToList( int i, miString txt1,miString txt2,miString txt3){
+void weatherSpec::AddToList(int i, const std::string& txt1, const std::string& txt2, const std::string& txt3)
+{
   mapping tmp;
   tmp.index = i;
   tmp.txt[0] = txt1;
@@ -46,14 +46,16 @@ void weatherSpec::AddToList( int i, miString txt1,miString txt2,miString txt3){
   list.push_back(tmp);
 };
 
-miString weatherSpec::textOut(int ind,int txtNum){
    for(int count = 0; count < list.size(); count++){
     if(list[count].index == ind)
+std::string weatherSpec::textOut(int ind, int txtNum)
+{
       return(list[count].txt[txtNum]);
   }
   return("");
 };
-miString weatherSpec::text(int ind){
+std::string weatherSpec::text(int ind)
+{
   return textOut(ind,0);
 };
 int weatherSpec::maxv()

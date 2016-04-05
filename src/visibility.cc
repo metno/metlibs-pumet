@@ -32,6 +32,7 @@
 #endif
 
 #include <math.h>
+#include <puTools/miStringFunctions.h>
 #include <iostream>
 
 
@@ -75,7 +76,6 @@
 //   use with the GFS to replace the statistical open ocean fog and visibility
 //   system.
 //
-#include <puTools/miString.h>
 
 double visibility(const double&  qv,     // water vapor mixing ratio (kg/kg)
 		  const double&  qc,     // cloud water mixing ratio (kg/kg)

@@ -31,6 +31,7 @@
 
 #include "symbolMaker.h"
 
+#include <puTools/miStringFunctions.h>
 #include <puTools/puMathAlgo.h>
 
 #include <cfloat>
@@ -137,9 +138,7 @@ customNumber(Symboltype type, bool lights)
    return createSymbol(type).customNumber(lights);
 }
 
-miutil::miString
-symbolMaker::
-picture(Symboltype type, bool lights)
+std::string symbolMaker::picture(Symboltype type, bool lights)
 {
    return createSymbol(type).picture(lights);
 }
@@ -149,9 +148,7 @@ picture(Symboltype type, bool lights)
 // reads symbol data from file, and builds the classes for symbols out of it
 
 
-void
-symbolMaker::
-readSymbols(const miString &SymbolFname)
+void symbolMaker::readSymbols(const std::string &SymbolFname)
 {
    initializeSymbols();
    MAXcustom = -1000;
@@ -161,12 +158,12 @@ readSymbols(const miString &SymbolFname)
    code darkness;
 
    ifstream codeFile;
-   miString readMi;
-   miString darkName, normalName, className;
-   miString darkPic, normalPic;
+   std::string readMi;
+   std::string darkName, normalName, className;
+   std::string darkPic, normalPic;
    int darkIndex, normalIndex;
    int Vision;
-   vector<miString> words;
+   vector<std::string> words;
 
    // reading begins here
 
@@ -178,58 +175,58 @@ readSymbols(const miString &SymbolFname)
    while (codeFile.good()) {
 
       getline(codeFile, readMi);
-      readMi.trim();
-      if (readMi.contains("#"))
+      miutil::trim(readMi);
+      if (miutil::contains(readMi, "#"))
          continue;
 
       // flags
 
-      if (readMi.contains("FOGSTATUS"))
-         if (readMi.contains("false"))
+      if (miutil::contains(readMi, "FOGSTATUS"))
+         if (miutil::contains(readMi, "false"))
             fogstatus = false;
 
-      if (readMi.contains("THUNDERSTATUS"))
-         if (readMi.contains("true"))
+      if (miutil::contains(readMi, "THUNDERSTATUS"))
+         if (miutil::contains(readMi, "true"))
             thunderstatus = true;
 
-      if (readMi.contains("VISIBILITY"))
-         if (readMi.contains("true"))
+      if (miutil::contains(readMi, "VISIBILITY"))
+         if (miutil::contains(readMi, "true"))
             visiblestatus = true;
 
-      if (readMi.contains("PICTURES"))
-         if (readMi.contains("true"))
+      if (miutil::contains(readMi, "PICTURES"))
+         if (miutil::contains(readMi, "true"))
             picturestatus = true;
 
-      if (readMi.contains("LONGTERM"))
-         if (readMi.contains("true"))
+      if (miutil::contains(readMi, "LONGTERM"))
+         if (miutil::contains(readMi, "true"))
             longterm = true;
 
-      if (readMi.contains("DYNAMIC_RAINLIMITS"))
-         if (readMi.contains("true"))
+      if (miutil::contains(readMi, "DYNAMIC_RAINLIMITS"))
+         if (miutil::contains(readMi, "true"))
             useDynamicRainLimits = true;
 
 
       if (readMi == "{") {
          getline(codeFile, className);
-         className.trim();
+         miutil::trim(className);
          getline(codeFile, normalName);
-         words = normalName.split();
-         normalName.replace(words[0], "");
+         words = miutil::split(normalName);
+         miutil::replace(normalName, words[0], "");
          normalIndex = atoi(words[0].c_str());
-         normalName.trim();
+         miutil::trim(normalName);
          if (picturestatus) {
             getline(codeFile, normalPic);
-            normalPic.trim();
+            miutil::trim(normalPic);
          }
          getline(codeFile, darkName);
-         darkName.trim();
-         words = darkName.split();
-         darkName.replace(words[0], "");
+         miutil::trim(darkName);
+         words = miutil::split(darkName);
+         miutil::replace(darkName, words[0], "");
          darkIndex = atoi(words[0].c_str());
-         darkName.trim();
+         miutil::trim(darkName);
          if (picturestatus) {
             getline(codeFile, darkPic);
-            darkPic.trim();
+            miutil::trim(darkPic);
          }
 
          // here starts the input of the symboldependet
@@ -860,10 +857,7 @@ isShower(int custom)
    return false;
 }
 
-void
-symbolMaker::
-make_pos_symbols( map<int, int>& index,
-                  map<int, miString>& image )
+void symbolMaker::make_pos_symbols(map<int, int>& index, map<int, std::string>& image)
 {
 
    index.clear();

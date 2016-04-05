@@ -29,7 +29,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <puTools/miString.h>
+#include <string>
 #include <map>
 
 class WindCalc {
@@ -43,10 +43,10 @@ private:
 public:
   WindCalc() {}
 
-  bool readFactors(const miutil::miString& filename);
+  bool readFactors(const std::string& filename);
   float meanWind(float wind10m, int stability, int height);
   float gust(float wind10m, int stability, int height);
-  static int beaufort(float wind10m, miutil::miString & text);
+  static int beaufort(float wind10m, std::string & text);
 
 };
 

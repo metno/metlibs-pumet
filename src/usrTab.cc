@@ -31,89 +31,134 @@
 
 #include "usrTab.h"
 
+#include <puTools/miStringFunctions.h>
+
 #include <iostream>
 #include <fstream>
 
 using namespace std;
-using namespace miutil;
 
 
-bool usrTab::create(miString infile){
-
+bool usrTab::create(const std::string& infile)
+{
   ifstream inp;
-  miString tmpStr;
-  vector<miString> tmpVec;
+  vector<std::string> tmpVec;
 
-
-  inp.open(infile.c_str(),ios::in);
-  if(!infile.exists()){
+  if (infile.empty()) {
     cerr<<"No setup file specified!"<<endl;
     return false;
   }
-  if( !inp ){
+  inp.open(infile.c_str(), ios::in);
+  if (!inp){
     cerr<<infile<<" not found .... "<<endl;
     return false;
   }
   entity.clear();
 
-  while(inp){
-    tmpStr = mNull;
-    getline(inp,tmpStr);
+  while(inp) {
+    std::string tmpStr;
+    getline(inp, tmpStr);
 
-    if(tmpStr.contains("#"))
+    if (miutil::contains(tmpStr, "#"))
       continue;
 
     if(tmpStr == mNull)
       continue;
 
-    if(tmpStr.contains("=")){
-      tmpVec = tmpStr.split('=');
+    if (miutil::contains(tmpStr, "=")){
+      tmpVec = miutil::split(tmpStr, "=");
       entity[tmpVec[0]] = tmpVec[1];
     }
   }
   inp.close();
   return true;
-};
+}
 
 
-miTime usrTab::dates(miString index){
-
-  miTime tmpTime = miTime::nowTime();
-  miString tmpStr;
-
-  tmpStr = entity[index];
+bool usrTab::exists(const std::string& m) const
+{
+  return entity.find(m) != entity.end();
+}
 
 
-  if(tmpStr.exists()){
-    const std::vector<miString> tmpVec = tmpStr.split();
+miutil::miTime usrTab::dates(const std::string& index)
+{
+  miutil::miTime tmpTime = miutil::miTime::nowTime();
+  std::string tmpStr = entity[index];
+
+  if (!tmpStr.empty()) {
+    const std::vector<std::string> tmpVec = miutil::split(tmpStr);
 
     if (tmpVec.size() > 2) {
         const int year = atoi(tmpVec[0].c_str());
         const int month = atoi(tmpVec[1].c_str());
-        
+
         int hour;
         if (tmpVec.size() > 3)
             hour = atoi(tmpVec[3].c_str());
         else
             hour = 12;
-        
+
         const int day = atoi(tmpVec[2].c_str());
         tmpTime.setTime(year, month, day, hour);
     }
   }
 
   return tmpTime;
-};
+}
 
 
-map<miString,miString> usrTab::selected(const vector<miString>& sel){
-  map<miString,miString> tmp;
-  miString s;
-  for ( int i = 0; i < sel.size(); i++ ){
-    s = sel[i];
-    if( bool(entity.count(s) ) )
-      tmp[s] = entity[s];
+std::string usrTab::content(const std::string& m) const
+{
+  const std::map<std::string, std::string>::const_iterator it = entity.find(m);
+  if (it != entity.end())
+    return it->second;
+  else
+    return std::string();
+}
+
+
+std::string usrTab::replace(const std::string& m) const
+{
+  const std::map<std::string, std::string>::const_iterator it = entity.find(m);
+  if (it != entity.end())
+    return it->second;
+  else
+    return m;
+}
+
+
+std::string usrTab::file(const std::string& m) const
+{
+  return content("WORKDIR") + content(m);
+}
+
+
+void usrTab::makeByHand(const std::string& m, const std::string& requ)
+{
+  entity[m] = requ;
+}
+
+
+int usrTab::numInt(const std::string& m) const
+{
+  return atoi(content(m).c_str());
+}
+
+
+float usrTab::numFloat(const std::string& m) const
+{
+  return atof(content(m).c_str());
+}
+
+
+map<std::string,std::string> usrTab::selected(const vector<std::string>& sel)
+{
+  map<std::string,std::string> tmp;
+  for (vector<std::string>::const_iterator sit =sel.begin(); sit != sel.end(); ++sit) {
+    const std::map<std::string, std::string>::const_iterator it = entity.find(*sit);
+    if (it != entity.end())
+      tmp[*sit] = it->second;
   }
   return tmp;
-};
-
+}
