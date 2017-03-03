@@ -1,3 +1,10 @@
+metlibs-tseries-pumet (6.0.0-1) unstable; urgency=low
+
+  * CMake build
+  * shared library
+
+ -- Alexander Bürger <alexander.buerger@met.no>  Fri, 03 Mar 2017 08:00:08 +0100
+
 metlibs-tseries-pumet (5.1.0-2) unstable; urgency=low
 
   * added pkg-config to debian/control Build-Depends

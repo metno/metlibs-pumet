@@ -1,16 +1,44 @@
 Source: metlibs-tseries-pumet
 Priority: optional
-Maintainer: Alexander Bürger <alexander.buerger@met.no>
-Build-Depends:  debhelper (>= 7), autotools-dev, g++,
-  autoconf (>=2.61), automake (>= 1.10), libtool (>= 1.5), pkg-config,
-  metlibs-putools-dev (>= 5.0.0),
-  libgtest-dev, python
-Standards-Version: 3.7.3
+Maintainer: MET Norway <diana@met.no>
+Build-Depends: debhelper (>= 9),
+ cmake,
+ libboost-dev,
+ metlibs-putools-dev (>= 6.0.0),
+ pkg-config,
+ libgtest-dev
+Standards-Version: 3.9.2
 Section: libs
 
 Package: metlibs-pumet-dev
 Section: libdevel
 Architecture: any
-Depends: metlibs-putools-dev (>= 5.0.0), ${misc:Depends}
-Description: pudatatypes.
- metlibs pudatatypes.
+Depends: libmetlibs-pumet6 (= ${binary:Version}),
+ ${shlibs:Depends},
+ ${misc:Depends}
+Description: MET Norway pu met library
+ MET Norway pu met library with, e.g., wind speed calculation
+ functions.
+ .
+ This package contains the development files.
+
+Package: libmetlibs-pumet6
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: MET Norway pu met library
+ MET Norway pu met library with, e.g., wind speed calculation
+ functions.
+ .
+ This package contains the shared library.
+
+Package: libmetlibs-pumet6-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: libmetlibs-pumet6 (= ${binary:Version})
+Description: MET Norway pu met library
+ MET Norway pu met library with, e.g., wind speed calculation
+ functions.
+ .
+ This package contains the shared library debug symbols.
