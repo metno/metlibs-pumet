@@ -1,0 +1,29 @@
+PROJECT(metlibs-pumet)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.11)
+
+SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+INCLUDE(MetnoUtils)
+INCLUDE(MetnoGTestUtils)
+
+METNO_PVERSION_DEFINES(PUMET "src/puMetVersion.h")
+
+SET(PKGS
+  metlibs-putools>=6.0.0
+)
+
+PKG_CHECK_MODULES(PC_METLIBS REQUIRED
+  ${PKGS}
+)
+
+FIND_PACKAGE(Boost REQUIRED)
+
+SET(lib_name "metlibs-pumet")
+
+METNO_GEN_PKGCONFIG(metlibs-pumet.pc.in "${lib_name}.pc"
+  "${PKGS}" "" "" "")
+
+CONFIGURE_FILE(puMet.pc.in puMet.pc @ONLY)
+INSTALL(FILES ${CMAKE_BINARY_DIR}/puMet.pc DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+
+ADD_SUBDIRECTORY(src)
+ADD_SUBDIRECTORY(test)

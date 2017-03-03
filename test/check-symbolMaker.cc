@@ -63,7 +63,7 @@ static void readData(const std::string &filename,
     termins.clear();
     
     std::ifstream fin( filename.c_str() );
-    ASSERT_TRUE(fin);
+    ASSERT_TRUE(fin.good());
     
     while (std::getline(fin, buf)) {
         boost::split( vals, buf, boost::is_any_of(",") );

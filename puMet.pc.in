@@ -1,11 +1,4 @@
-prefix=@prefix@
-exec_prefix=@exec_prefix@
-libdir=@libdir@
-includedir=@includedir@
-
 Name: puMet
-Description: The puMet Library
-Version: @VERSION@
-Requires: puTools >= 5.0.0
-Libs: -L${libdir} -lpuMet
-Cflags: -I${includedir}
+Description: MET Norway pu met library
+Version: @PUMET_PVERSION_FULL@
+Requires: metlibs-pumet = @PUMET_PVERSION_FULL@
