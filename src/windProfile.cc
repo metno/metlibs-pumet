@@ -330,7 +330,7 @@ bool Uprofile::compute( double zref,double speedZref, std::vector<double> z)
 
     sort(z.begin(),z.end());
     // adc: changed double zcount to int - 26.07.2000
-    for(int zcount= 0; zcount<z.size() ; zcount++){
+    for(size_t zcount= 0; zcount<z.size() ; zcount++){
 
       if(z[zcount]<zZero)
 	z[zcount]=zZero;

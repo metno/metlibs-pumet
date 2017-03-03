@@ -48,7 +48,7 @@ using namespace std;
 //       computes only the gust factor
 
 bool tafGF::getGustFact(const std::string& Name, float DD,float FF, float& gf){
-  for (int i=0; i<stations.size();i++){
+  for (size_t i=0; i<stations.size();i++){
     if(Name == stations[i].name){
       return(stations[i].getSTgust(DD,FF,gf));
     }
@@ -73,9 +73,9 @@ bool tafGF::getGust(const std::string& Name, float DD,float FF, float& gf){
 //     2nd step : search the sector and the main speed range
 
 bool station::getSTgust( float DD,float FF, float& gf){
-  for (int i=0; i<gust.size(); i++){
+  for (size_t i=0; i<gust.size(); i++){
     if (gust[i].isinside(DD)){
-      for(int spd=0; spd<FFsec.size(); spd++){
+      for(size_t spd=0; spd<FFsec.size(); spd++){
 	if (FFsec[spd].isinside(FF)){
 	  gf = gust[i].value(spd);
 	  return(true);

@@ -58,13 +58,13 @@ void ptStatistics::init(const vector<float>& a, int di, float de){
 void ptStatistics::init(const vector<float>& a, int di, vector<float> de){
   baseInit(a,di);
   decils.erase(decils.begin(),decils.end());
-  for( int i = 0; i< de.size(); i++){
-    float f = de[i]/10;  
+  for (size_t i = 0; i< de.size(); i++){
+    float f = de[i]/10;
     decils.push_back( (f < 1 ?  int(f * di) : di-1) );
   }
 };
 
-vector<float> ptStatistics::compDecils(){  
+vector<float> ptStatistics::compDecils(){
   int count;
   vector<float> result(tSteps*decils.size(),0);
   vector<float> OneTime;
@@ -77,7 +77,7 @@ vector<float> ptStatistics::compDecils(){
       OneTime.push_back(allTimes[count]);
     }
     sort(OneTime.begin(),OneTime.end());
-    for(int dz = 0; dz < decils.size(); dz++)
+    for(size_t dz = 0; dz < decils.size(); dz++)
       result[dz*tSteps+time]=OneTime[decils[dz]];
   }
   return result;
@@ -126,7 +126,7 @@ vector<float> ptStatistics::getMean(const vector<float>& a, int di){
 
 vector<float> ptStatistics::getStDev(const vector<float>& a, int di){
   vector<float> result = getVar(a,di);
-  for( int i = 0; i < result.size(); i++)
+  for (size_t i = 0; i < result.size(); i++)
     result[i] = sqrt(result[i]);
   return result;
 };

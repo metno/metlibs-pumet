@@ -46,7 +46,7 @@ void weatherSpec::AddToList(int i, const std::string& txt1, const std::string& t
 
 std::string weatherSpec::textOut(int ind, int txtNum)
 {
-  for (int count = 0; count < list.size(); count++) {
+  for (size_t count = 0; count < list.size(); count++) {
     if (list[count].index == ind)
       return(list[count].txt[txtNum]);
   }
@@ -61,7 +61,7 @@ std::string weatherSpec::text(int ind)
 int weatherSpec::maxv()
 {
   int mx = - 100000;
-  for (int c = 0; c < list.size(); c++)
+  for (size_t c = 0; c < list.size(); c++)
     if(list[c].index > mx)
       mx = list[c].index;
   return mx;
@@ -70,7 +70,7 @@ int weatherSpec::maxv()
 int weatherSpec::minv()
 {
  int mi = 100000;
-  for(int c = 0; c < list.size(); c++)
+  for(size_t c = 0; c < list.size(); c++)
     if(list[c].index < mi)
       mi = list[c].index;
   return mi;

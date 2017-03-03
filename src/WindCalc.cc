@@ -110,43 +110,43 @@ int WindCalc::beaufort(float wind10m, std::string& tekst)
   if (ms < 0) {
     bf=-1;
     tekst="Ugyldig";}
-  else if ((ms >= 0) && (ms < 0.25)){
+  else if (ms < 0.25) {
     bf = 0;
     tekst="Vindstille";}
-  else if ((ms >= 0.25) && (ms < 1.55)) {
+  else if (ms < 1.55) {
     bf = 1;
     tekst = "Flau vind"; }
-  else if ((ms >= 1.55) && (ms < 3.35)) {
+  else if (ms < 3.35) {
     bf = 2;
     tekst = "Svak vind"; }
-  else if ((ms >= 3.35) && (ms < 5.45)) {
+  else if (ms < 5.45) {
     bf = 3;
     tekst = "Lett bris"; }
-  else if ((ms >= 5.45) && (ms < 7.95)) {
+  else if (ms < 7.95) {
     bf = 4;
     tekst = "Laber bris"; }
-  else if ((ms >= 7.95) && (ms < 10.75)) {
+  else if (ms < 10.75) {
     bf = 5;
     tekst = "Frisk bris"; }
-  else if ((ms >= 10.75) && (ms < 13.85)) {
+  else if (ms < 13.85) {
     bf = 6;
     tekst = "Liten kuling"; }
-  else if ((ms >= 13.85) && (ms < 17.15)) {
+  else if (ms < 17.15) {
   bf = 7;
   tekst = "Stiv kuling"; }
-  else if ((ms >= 17.15) && (ms < 20.75)) {
+  else if (ms < 20.75) {
     bf = 8;
     tekst = "Sterk kuling"; }
-  else if ((ms >= 20.75) && (ms < 24.45)) {
+  else if (ms < 24.45) {
     bf = 9;
     tekst = "Liten storm"; }
-  else if ((ms >= 24.45) && (ms < 28.45)) {
+  else if (ms < 28.45) {
     bf = 10;
     tekst = "Full storm"; }
-  else if ((ms >= 28.45) && (ms < 32.55)) {
+  else if (ms < 32.55) {
     bf = 11;
     tekst = "Sterk storm"; }
-  else if (ms >= 32.55) {
+  else /* ms >= 32.55 */ {
     bf = 12;
     tekst = "Orkan";
   }
