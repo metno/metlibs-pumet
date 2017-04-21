@@ -17,6 +17,7 @@ ADD_EXECUTABLE(pumet_test
 
 TARGET_LINK_LIBRARIES(pumet_test
   pumet
+  ${GTEST_LIBRARY}
   ${GTEST_MAIN_LIBRARY}
 )
 
