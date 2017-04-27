@@ -8,7 +8,7 @@ INCLUDE(MetnoGTestUtils)
 METNO_PVERSION_DEFINES(PUMET "src/puMetVersion.h")
 
 SET(PKGS
-  metlibs-putools>=6.0.0
+  metlibs-putools>=7.0.0
 )
 
 PKG_CHECK_MODULES(PC_METLIBS REQUIRED

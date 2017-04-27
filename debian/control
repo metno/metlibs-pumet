@@ -4,7 +4,7 @@ Maintainer: MET Norway <diana@met.no>
 Build-Depends: debhelper (>= 9),
  cmake,
  libboost-dev,
- metlibs-putools-dev (>= 6.0.0),
+ metlibs-putools-dev (>= 7.0.0),
  pkg-config,
  libgtest-dev
 Standards-Version: 3.9.2
