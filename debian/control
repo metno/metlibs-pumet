@@ -4,7 +4,7 @@ Maintainer: MET Norway <diana@met.no>
 Build-Depends: debhelper (>= 9),
  cmake,
  libboost-dev,
- metlibs-putools-dev (>= 7.0.0),
+ metlibs-putools-dev (>= 8.0.0),
  pkg-config,
  libgtest-dev
 Standards-Version: 3.9.2
@@ -13,7 +13,7 @@ Section: libs
 Package: metlibs-pumet-dev
 Section: libdevel
 Architecture: any
-Depends: libmetlibs-pumet6 (= ${binary:Version}),
+Depends: libmetlibs-pumet7 (= ${binary:Version}),
  ${shlibs:Depends},
  ${misc:Depends}
 Description: MET Norway pu met library
@@ -22,7 +22,7 @@ Description: MET Norway pu met library
  .
  This package contains the development files.
 
-Package: libmetlibs-pumet6
+Package: libmetlibs-pumet7
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}
@@ -32,11 +32,11 @@ Description: MET Norway pu met library
  .
  This package contains the shared library.
 
-Package: libmetlibs-pumet6-dbg
+Package: libmetlibs-pumet7-dbg
 Section: debug
 Priority: extra
 Architecture: any
-Depends: libmetlibs-pumet6 (= ${binary:Version})
+Depends: libmetlibs-pumet7 (= ${binary:Version})
 Description: MET Norway pu met library
  MET Norway pu met library with, e.g., wind speed calculation
  functions.
