@@ -19,6 +19,7 @@ TARGET_LINK_LIBRARIES(pumet_test
   pumet
   ${GTEST_LIBRARY}
   ${GTEST_MAIN_LIBRARY}
+  Threads::Threads
 )
 
 ADD_TEST(NAME pumet_test
